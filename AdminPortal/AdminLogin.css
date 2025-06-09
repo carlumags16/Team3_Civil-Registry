@@ -1,0 +1,136 @@
+:root {
+    --admin-color: #3498db;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+
+}
+        
+body {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: var(--light-text);
+}
+        
+.login-container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+        
+.logo {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: var(--light-text);
+}
+       
+h1 {
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+        
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+       
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+        
+input {
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+        
+input:focus {
+  outline: 2px solid var(--admin-color);
+  background: white;
+}
+        
+.password-container {
+  position: relative;
+}
+        
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #7f8c8d;
+}
+        
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: var(--admin-color);
+  color: white;
+  font-weight: 500;
+  margin-top: 10px;
+}
+       
+.login-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+       
+.login-btn:active {
+  transform: translateY(0);
+}
+        
+.message {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  display: none;
+}
+        
+.error {
+  background-color: rgba(231, 76, 60, 0.2);
+  border-left: 4px solid var(--error-color);
+  display: block;
+}
+        
+.success {
+  background-color: rgba(46, 204, 113, 0.2);
+  border-left: 4px solid var(--success-color);
+  display: block;
+}
+        
+.forgot-link {
+  display: block;
+  margin-top: 15px;
+  color: var(--light-text);
+  opacity: 0.7;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+        
+.forgot-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}

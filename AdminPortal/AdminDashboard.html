@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="AdminDashboard.css" />
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+  <div class="flex min-h-screen">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2 class="Dashboard" style="font-weight: bold; font-size: 24px;">Admin Dashboard</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="active"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
+        <!--<button onclick="website()"><a href="#"><i class="fas fa-globe mr-2"></i> Website</a></button>-->
+        <button onclick="logout()"><a href="#"><i class="fas fa-sign-in-alt"></i> Log out</a></button>
+      </nav>
+    </aside>
+    <main class="main-content">
+      <h1 class="text-2xl font-bold mb-6">Certificate Management</h1>
+      
+      <div class="filter-panel flex flex-wrap gap-4">
+        <div class="filter-group flex-1">
+          <label class="filter-label">Date Range</label>
+          <div class="flex gap-2">
+            <input type="date" id="startDate" class="filter-input">
+            <input type="date" id="endDate" class="filter-input">
+          </div>
+        </div>
+        
+        <div class="filter-group flex-1">
+          <label class="filter-label">Certificate Type</label>
+          <select id="dataType" class="filter-input">
+            <option value="all">All Types</option>
+            <option value="birth">Birth Certificates</option>
+            <option value="marriage">Marriage Certificates</option>
+            <option value="death">Death Certificates</option>
+            <option value="cenomar">Cenomar Certificates</option>
+            <option value="cenodeath">Cenodeath Certificates</option>
+          </select>
+        </div>
+        
+        <div class="filter-group flex-1">
+          <label class="filter-label">Status</label>
+          <select id="statusFilter" class="filter-input">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        
+        <div class="filter-group flex-1">
+          <label class="filter-label">Search</label>
+          <input type="text" id="searchInput" class="filter-input" placeholder="Search records...">
+        </div>
+        
+        <div class="filter-group flex items-end">
+          <button id="fetchBtn" class="btn btn-primary w-full">
+            <i class="fas fa-sync-alt mr-2"></i> Fetch Data
+          </button>
+        </div>
+      </div>
+      <div class="data-table-container">
+        <div class="table-controls flex justify-between items-center p-4">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">Show:</span>
+            <select id="pageSize" class="filter-input" style="width: auto; padding: 5px 10px;">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span class="text-sm">entries</span>
+          </div>
+          <!--<button id="exportBtn" class="btn" style="background-color: var(--success-color); color: white;">
+            <i class="fas fa-file-export mr-2"></i> Export
+          </button>-->
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID <i class="fas fa-sort ml-1"></i></th>
+              <th>Name <i class="fas fa-sort ml-1"></i></th>
+              <th>Certificate Type <i class="fas fa-sort ml-1"></i></th>
+              <th>Date <i class="fas fa-sort ml-1"></i></th>
+              <th>Status <i class="fas fa-sort ml-1"></i></th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody">
+          </tbody>
+        </table>
+        
+        <div class="pagination">
+          <div class="page-info">
+            Showing entries
+          </div>
+          <div class="page-buttons">
+            <button id="firstPage"><i class="fas fa-angle-double-left"></i></button>
+            <button id="prevPage"><i class="fas fa-angle-left"></i></button>
+            <span id="pageNumbers"></span>
+            <button id="nextPage"><i class="fas fa-angle-right"></i></button>
+            <button id="lastPage"><i class="fas fa-angle-double-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="AdminDashboard.js"></script>
+</body>
+</html>
