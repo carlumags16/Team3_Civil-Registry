@@ -89,8 +89,17 @@ $result_full = $stmt->get_result();
           <button onclick="logout()">Logout</button>
         </div>
       </div>
+      <div id="userIconContainer">
+        <i class="fas fa-user-circle" id="userIcon"></i>
+        <div id="userDropdown">
+          <p>Hello, <span id="userNameDisplay"></span></p><br>
+          <button onclick="logout()">Logout</button>
+        </div>
+      </div>
     </nav>
   </div>
+
+
 
 </header>
 
