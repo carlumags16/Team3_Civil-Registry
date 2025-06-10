@@ -19,9 +19,13 @@
       <div class="form-container">
         <input required type="text" name="username" class="input" placeholder="Username" />
         <input required type="email" name="email" class="input" placeholder="Email" />
-        <input required type="password" name="password" class="input" placeholder="Password" />
+        <div class="password-wrapper">
+         <input required type="password" name="confirm_password" class="input" placeholder="Confirm Password" />
+         <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
+        </div>
+
       </div>
-      <button type="submit">Sign up</button>
+      <button type="submit"> <i class="fas fa-user-plus"></i> Sign up </button>
     </form>
     <div class="form-section">
       <p>Have an account? <a href="#" onclick="toggleForms()">Log in</a></p>
