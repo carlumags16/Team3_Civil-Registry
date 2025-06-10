@@ -21,9 +21,9 @@ if (!$id || !in_array($action, ['approve', 'reject'])) {
 $tables = [
     'birth' => 'birth_certi',
     'death' => 'death_certi',
-    'marriage' => 'marriage_cert',
-    'cenomar' => 'cenomar_cert',
-    'cenodeath' => 'cenodeath_cert'
+    'marriage' => 'marriage_certi',
+    'cenomar' => 'cenomar_certi',
+    'cenodeath' => 'cenodeath_certi'
 ];
 
 $updated = false;
