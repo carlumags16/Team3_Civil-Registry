@@ -126,7 +126,7 @@ function openForm(type) {
           <li style="margin-bottom: 0.5rem;">Ensure all information provided is accurate and truthful</li>
           <li style="margin-bottom: 0.5rem;">Only upload valid and authentic supporting documents</li>
           <li style="margin-bottom: 0.5rem;">Settle any applicable fees in a timely manner</li>
-          <li><strong>Please allow 3–10 business days for processing</strong></li>
+          <li><strong>Please allow 5-7 business days for processing</strong></li>
           <li>If a field does not apply to you, enter <strong>N/A.</strong></li>
         </ul>
       <div style="margin-top: 1.5rem;">

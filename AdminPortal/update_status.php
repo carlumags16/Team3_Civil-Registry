@@ -1,10 +1,10 @@
 <?php
 header('Content-Type: application/json');
 
-// Include the main connection file
+
 include '../connect.php';
 
-// Get the JSON input
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 $id = $input['id'] ?? null;
@@ -17,7 +17,7 @@ if (!$id || !in_array($action, ['approve', 'reject'])) {
     exit;
 }
 
-// Define the certificate tables and their types
+
 $tables = [
     'birth' => 'birth_certi',
     'death' => 'death_certi',
@@ -28,7 +28,7 @@ $tables = [
 
 $updated = false;
 
-// First find which table contains this certificate
+
 foreach ($tables as $type => $table) {
     $check = $conn->prepare("SELECT id, user_id FROM $table WHERE id = ?");
     if (!$check) continue;
@@ -40,7 +40,7 @@ foreach ($tables as $type => $table) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         
-        // Update status in the certificate table
+        // Update status certificate table
         $stmt = $conn->prepare("UPDATE $table SET status = ? WHERE id = ?");
         if (!$stmt) continue;
         
