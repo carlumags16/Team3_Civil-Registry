@@ -501,4 +501,27 @@ async function downloadPDF() {
     doc.save('registration-summary.pdf');
 }
 
-
+function logout() {
+  Swal.fire({
+    title: 'Are you sure you want to log out?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, log me out',
+    cancelButtonText: 'Discard',
+    confirmButtonColor: '#3b82f6',
+    cancelButtonColor: '#aaa'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      localStorage.removeItem('loggedInUser');
+      Swal.fire({
+        icon: 'success',
+        title: 'Logged Out',
+        text: 'You have successfully logged out.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3b82f6'
+      }).then(() => {
+        window.location.href = '../Loginweb/LoginPage.html';
+      });
+    }
+  });
+}
