@@ -477,12 +477,11 @@ $result_full = $stmt->get_result();
 
                                 <div class="input-row">
                                     <div class="input-group">
-                                        <label for="birthOrientation">Sexual Orientation</label>
+                                        <label for="birthOrientation">Sex</label>
                                         <select name="deathOrientation" id="birthOrientation" placeholder="Sex">
                                             <option value="Select">-- Select --</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
-                                            <option value="non-binary">Non-Binary</option>
                                         </select>
                                     </div>
                                     <div class="input-group">
@@ -567,12 +566,11 @@ $result_full = $stmt->get_result();
 
                             <div class="input-row">
                                 <div class="input-group">
-                                    <label for="cenomarOrientation">Sexual Orientation</label>
+                                    <label for="cenomarOrientation">Sex</label>
                                     <select name="cenomarOrientation" id="cenomarOrientation" placeholder="Sex">
                                         <option value="Select">-- Select --</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
-                                        <option value="non-binary">Non-Binary</option>
                                     </select>
                                 </div>
                                 <div class="input-group">
@@ -684,12 +682,12 @@ $result_full = $stmt->get_result();
 
                             <div class="input-row">
                                 <div class="input-group">
-                                    <label for="cenodeathOrientation">Sexual Orientation</label>
+                                    <label for="cenodeathOrientation">Sex</label>
                                     <select name="cenodeathOrientation" id="cenodeathOrientation" placeholder="Sex">
                                         <option value="Select">-- Select --</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
-                                        <option value="non-binary">Non-Binary</option>
+                                    
                                     </select>
                                 </div>
                                 <div class="input-group">
