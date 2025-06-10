@@ -832,6 +832,15 @@ $result_full = $stmt->get_result();
 </div>
 
     <script src="Certificate.js"> </script>
+    <script>
+// Set the username when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    if (userNameDisplay) {
+        userNameDisplay.textContent = '<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'User'; ?>';
+    }
+});
+</script>
 </body>
 
 </html>
