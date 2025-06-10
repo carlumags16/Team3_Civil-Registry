@@ -269,12 +269,11 @@ $result_full = $stmt->get_result();
 
                             <div class="input-row">
                                 <div class="input-group">
-                                    <label for="birthOrientation">Sexual Orientation</label>
+                                    <label for="birthOrientation">Sex</label>
                                     <select name="birthOrientation" id="birthOrientation" placeholder="Sex">
                                         <option value="Select">-- Select --</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
-                                        <option value="non-binary">Non-Binary</option>
                                     </select>
                                 </div>
                                 <div class="input-group">
