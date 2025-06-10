@@ -525,3 +525,70 @@ function logout() {
     }
   });
 }
+
+function logout() {
+    Swal.fire({
+        title: 'Are you sure you want to log out?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, log me out',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#3b82f6',
+        cancelButtonColor: '#6c757d',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Call server to destroy session
+            fetch('../Loginweb/logout.php', {
+                method: 'POST',
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Logout failed');
+                return response.json();
+            })
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Logged Out',
+                    text: 'You have been successfully logged out.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3b82f6'
+                }).then(() => {
+                    window.location.href = '../Loginweb/LoginPage.html';
+                });
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                // Still redirect even if there's an error
+                window.location.href = '../Loginweb/LoginPage.html';
+            });
+        }
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    if (userIcon && userDropdown) {
+        // Toggle dropdown when clicking user icon
+        userIcon.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            userDropdown.style.display = 'none';
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        userDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+       
+    }
+});

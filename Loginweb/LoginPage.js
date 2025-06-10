@@ -10,6 +10,7 @@ document.getElementById('signupForm').addEventListener('submit', function (e) {
     const username = form.querySelector('input[name=username]').value.trim();
     const email = form.querySelector('input[type=email]').value.trim();
     const password = form.querySelector('input[type=password]').value.trim();
+    const confirmPassword = form.querySelector('input[name=confirm_password]').value.trim();
 
     if (!username || !email || !password) {
         Swal.fire({ icon: 'warning', title: 'Incomplete Information', text: 'Fill in all fields.' });
