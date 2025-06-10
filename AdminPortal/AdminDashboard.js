@@ -270,7 +270,7 @@ function updateCertificateStatus(id, action) {
 
 function logout() {
   sessionStorage.removeItem("isAdmin");
-  window.location.href = 'AdminLogin.html';
+  window.location.href = '../index.php';
 }
 
 /*
