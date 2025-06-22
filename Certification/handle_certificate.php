@@ -368,12 +368,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $document_stmt->bind_param("siss", $newRegId, $user_id, $cert_id, $certificateType);
 
-    if ($document_stmt->execute()) {
-        echo $message_cert . " submitted successfully with registration ID: $newRegId.";
-    } else {
-        http_response_code(500);
-        echo "Error executing document insert: " . $document_stmt->error;
-    }
+   if (!$document_stmt->execute()) {
+    http_response_code(500);
+    echo "Error executing document insert: " . $document_stmt->error;
+    exit;
+}
 
     $stmt->close();
     $document_stmt->close();

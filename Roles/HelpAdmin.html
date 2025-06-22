@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback & Complaint Officer Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+:root {
+  --primary-color: #9c27b0;
+  --secondary-color: #7b1fa2;
+  --success-color: #4caf50;
+  --danger-color: #f44336;
+  --warning-color: #ff9800;
+  --info-color: #2196f3;
+  --light-color: #f5f5f5;
+  --dark-color: #212121;
+  --sidebar-width: 280px;
+  --header-height: 70px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: #6790a9fd;
+  color: var(--dark-color);
+  position: fixed;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 20px;
+  color: white;
+  background-color: #69889c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h2 {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+.sidebar-header p {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.sidebar-nav {
+  padding: 20px 0;
+  overflow-y: auto;
+  height: calc(100vh - var(--header-height));
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--primary-color);
+}
+
+.menu-item i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.menu-item.logout-btn {
+  color: #e74c3c;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
+}
+
+.menu-item.logout-btn:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  color: var(--dark-color);
+}
+
+.user-info {
+  text-align: right;
+}
+
+.user-info .name {
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.user-info .role {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Feedback Stats Cards */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.stat-card.pending .stat-icon {
+  color: var(--warning-color);
+}
+
+.stat-card.reviews .stat-icon {
+  color: var(--info-color);
+}
+
+.stat-card.complaints .stat-icon {
+  color: var(--danger-color);
+}
+
+.stat-card.resolved .stat-icon {
+  color: var(--success-color);
+}
+
+.stat-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: var(--dark-color);
+}
+
+.stat-card p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Feedback Channels Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  border-bottom: 3px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.tab:hover:not(.active) {
+  background-color: #f5f5f5;
+}
+
+.feedback-section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.section-header h2 {
+  font-size: 1.3rem;
+  color: var(--dark-color);
+}
+
+.search-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.search-filter input,
+.search-filter select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.search-filter input {
+  width: 200px;
+}
+
+.search-filter select {
+  background-color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+tr:hover {
+  background-color: #f8f9fa;
+}
+.feedback-type {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.type-review {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+.type-complaint {
+  background-color: #ffebee;
+  color: #c62828;
+}
+.type-suggestion {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+.feedback-channel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+}
+.channel-web {
+  color: #2196f3;
+}
+.channel-email {
+  color: #4caf50;
+}
+.channel-phone {
+  color: #9c27b0;
+}
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+.status-inprogress {
+  background-color: #bee5eb;
+  color: #0c5460;
+}
+.status-resolved {
+  background-color: #d4edda;
+  color: #155724;
+}
+.priority {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.priority-high {
+  background-color: #f44336;
+}
+.priority-medium {
+  background-color: #ff9800;
+}
+.priority-low {
+  background-color: #4caf50;
+}
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #666;
+}
+.btn-outline:hover {
+  background-color: #f8f9fa;
+}
+/* Feedback Detail Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background-color: white;
+  width: 80%;
+  max-width: 900px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+.modal-header {
+  padding: 15px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 {
+  font-size: 1.2rem;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+.feedback-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.detail-group h4 {
+  margin-bottom: 10px;
+  color: var(--dark-color);
+}
+.detail-group p {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+.feedback-content {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid var(--primary-color);
+}
+.feedback-content p {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+.response-section {
+  margin-top: 30px;
+}
+.response-section h4 {
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+.response-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 120px;
+  margin-bottom: 15px;
+  resize: vertical;
+}
+.response-history {
+  margin-top: 30px;
+}
+.response-item {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  border-left: 4px solid #9c27b0;
+}
+.response-item p {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+.response-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 10px;
+}
+.modal-footer {
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #eee;
+}
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  .feedback-details {
+    grid-template-columns: 1fr;
+  }
+  .search-filter {
+    flex-direction: column;
+    width: 100%;
+  }
+  .search-filter input {
+    width: 100%;
+  }
+  .modal-content {
+    width: 95%;
+  }
+}
+
+#exportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #0055a5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+#exportBtn:hover {
+  background-color: #004080;
+}
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2 class="Dashboard">Admin Dashboard</h2>
+    <p id="adminInfo"></p>
+  </div>
+  <nav class="sidebar-nav">
+    <!-- Super Admin Only -->
+    <a href="#" class="menu-item" data-role="Super Admin">
+      <i class="fas fa-users-cog mr-2"></i> Manage Admin Users
+    </a>
+    <a href="#" class="menu-item" data-role="Super Admin">
+      <i class="fas fa-database mr-2"></i> All Transactions
+    </a>
+    <!-- Shared/Dashboard -->    
+     <!-- APPLICATION, PROCESSING, AND INTAKE Clerk -->
+    <a href="../AdminPortal/AdminDashboard.html" class="menu-item" data-visible-to="all">
+      <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+    </a>
+    <!-- Verifying Officer -->
+    <a href="../Roles/VerifierAdmin.html" class="menu-item" data-role="Verifying Officer">
+      <i class="fas fa-tasks mr-2"></i> Validate Requests
+    </a>
+    <!-- Cashier Admin -->
+    <a href="../Roles/CashierAdmin.html" class="menu-item" data-role="Cashier">
+      <i class="fas fa-money-check-alt mr-2"></i> Transaction Payments
+    </a>
+    <!-- Document Signatory Officer -->
+    <a href="../Roles/SignatoryAdmin.html" class="menu-item" data-role="Document Signatory Officer">
+      <i class="fas fa-signature mr-2"></i> Signature
+    </a>
+    <!-- Releasing Officer -->
+    <a href="../Roles/ReleasingAdmin.html" class="menu-item" data-role="Releasing Officer">
+      <i class="fas fa-file mr-2"></i> Document Releasing
+    </a>
+    <!-- Report Admin -->
+    <a href="../Roles/ReportAdmin.html" class="menu-item" data-role="Report Officer">
+      <i class="fas fa-chart-line mr-2"></i> Reports
+    </a>
+    <!-- Help Desk -->
+    <a href="../Roles/HelpAdmin.html" class="menu-item" data-role="Help Desk Officer">
+      <i class="fas fa-comments mr-2"></i> Inquiries
+    </a>
+    <!-- Shared/Logout -->
+    <button onclick="logout()" class="menu-item logout-btn" data-visible-to="all">
+      <i class="fas fa-sign-out-alt mr-2"></i> Log out
+    </button>
+  </nav>
+</aside>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="header">
+    <h1>Feedback & Complaint Management</h1>
+    <div class="user-info">
+      <div id="adminUsername" class="name"></div>
+      <div id="adminRole" class="role"></div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-cards">
+    <div class="stat-card pending">
+      <div class="stat-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <h3>Pending Response</h3>
+      <p>Requires your attention</p>
+      <div class="stat-value"></div>
+    </div>
+    <div class="stat-card reviews">
+      <div class="stat-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Reviews</h3>
+      <p>Customer feedback</p>
+      <div class="stat-value"></div>
+    </div>
+    <div class="stat-card complaints">
+      <div class="stat-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h3>Complaints</h3>
+      <p>Issues to resolve</p>
+      <div class="stat-value"></div>
+    </div>
+    <div class="stat-card resolved">
+      <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Resolved</h3>
+      <p>This month</p>
+      <div class="stat-value"></div>
+    </div>
+  </div>
+
+  <!-- Feedback Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="all">All Feedback</div>
+    <div class="tab" data-tab="pending">Pending Response</div>
+    <div class="tab" data-tab="reviews">Reviews</div>
+    <div class="tab" data-tab="complaints">Complaints</div>
+    <div class="tab" data-tab="suggestions">Suggestions</div>
+  </div>
+
+  <!-- Feedback Section -->
+  <div class="feedback-section">
+    <div class="section-header">
+      <h2>Recent Feedback</h2>
+      <div class="search-filter">
+        <div class="print-wrapper">
+          <button type="button" id="exportBtn">
+            <i class="fas fa-print"></i> Export
+          </button>
+        </div>
+        <select>
+          <option>All Status</option>
+          <option>Pending</option>
+          <option>In Progress</option>
+          <option>Resolved</option>
+          <option>Escalated</option>
+        </select>
+        <select>
+          <option>All Channels</option>
+          <option>Website</option>
+          <option>Email</option>
+          <option>Phone</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="printArea">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Channel</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Feedback Detail Modal -->
+<div class="modal" id="feedbackModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Feedback Details #FB-<span id="feedbackId"></span></h3>
+      <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="feedback-details">
+        <div class="detail-group">
+          <h4>Customer Information</h4>
+          <p><strong>Name:</strong> <span id="customerName">Michael Brown</span></p>
+          <p><strong>Email:</strong> <span id="customerEmail">michael.brown@example.com</span></p>
+          <p><strong>Phone:</strong> <span id="customerPhone">+1 (555) 123-4567</span></p>
+          <p><strong>Customer ID:</strong> <span id="customerId">CUS-78945</span></p>
+        </div>
+        <div class="detail-group">
+          <h4>Feedback Information</h4>
+          <p><strong>Type:</strong> <span id="feedbackType" class="feedback-type type-complaint">Complaint</span></p>
+          <p><strong>Date:</strong> <span id="feedbackDate">2023-05-15 14:30</span></p>
+          <p><strong>Channel:</strong> <span id="feedbackChannel"><i class="fas fa-envelope channel-email"></i> Email</span></p>
+          <p><strong>Status:</strong> <span id="feedbackStatus" class="status status-pending">Pending</span></p>
+          <p><strong>Priority:</strong> <span id="feedbackPriority"><span class="priority priority-high"></span> High</span></p>
+        </div>
+      </div>
+      <div class="feedback-content">
+        <h4>Feedback Content</h4>
+        <p id="feedbackContent"></p>
+      </div>
+      <div class="response-section">
+        <h4>Response</h4>
+        <div class="response-form">
+          <textarea placeholder="Type your response here..."></textarea>
+          <div class="form-actions">
+            <button class="btn btn-primary">Send Response</button>
+            <button class="btn btn-outline">Save Draft</button>
+            <select class="status-update">
+              <option value="pending">Pending</option>
+              <option value="inprogress">In Progress</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="response-history">
+        <h4>Response History</h4>
+        <div class="response-item">
+          <p></p>
+          <div class="response-meta">
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="response-item">
+          <p></p>
+          <div class="response-meta">
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline">Escalate to Manager</button>
+      <div>
+        <button class="btn btn-outline">Add Note</button>
+        <button class="btn btn-primary">Update Status</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="HelpAdmin.js"></script>
+<script src="rolesidebarVisibility.js"></script>
+</body>
+</html>

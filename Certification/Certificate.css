@@ -474,6 +474,7 @@ body{
   margin: 0 auto 8px auto;
   border-radius: 50%;
   background-color: white;
+  color: gray;
 }
 
 .progressbar li:after {
@@ -502,7 +503,19 @@ body{
   color: white;
 }
 
-.progressbar li.active + li:after {
+.progressbar li.current {
+  color: #3b82f6; /* blue */
+  font-weight: bold;
+}
+
+.progressbar li.current:before {
+  border-color: #3b82f6;
+  background-color: #3b82f6;
+  color: white;
+}
+
+.progressbar li.active + li:after,
+.progressbar li.current + li:after {
   background-color: #27ae60;
 }
 
@@ -876,4 +889,479 @@ label[for="birthOrientation"] {
 
 .pdf-note p {
   margin: 0;
+}
+
+
+/* Payment Section Enhancements */
+
+/* Input Field for Quantity */
+.payment-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.payment-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.payment-card {
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.payment-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-wrapper {
+  padding: 12px;
+  border-radius: 50%;
+}
+
+.qr-icon {
+  background-color: #e0f0ff;
+  color: #1d4ed8;
+}
+
+.ewallet-icon {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+
+.bank-icon {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.otc-icon {
+  background-color: #fef9c3;
+  color: #facc15;
+}
+
+.payment-details {
+  margin-top: 16px;
+}
+
+.payment-details select,
+.payment-details input,
+.payment-details button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.payment-details button {
+  background-color: #555;
+  color: white;
+  border: none;
+}
+
+.otp-section {
+  margin-top: 12px;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.otp-box {
+  width: 30px;
+  height: 36px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.resend-text {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* SUMMARY */
+/* Payment Summary Section */
+.payment-summary {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+  margin-top: 30px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.summary-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.summary-text {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.summary-highlight {
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.summary-label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.summary-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.summary-totals {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.summary-totals p {
+  margin-bottom: 6px;
+}
+
+.summary-final {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #1d4ed8;
+}
+
+/* Button */
+#proceedToReceiptBtn {
+  font-weight: 600;
+}
+
+/* Receipt info styling */
+/* Step 5: Receipt Styling */#receiptContent {
+  max-width: 28rem;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#receiptContent .receipt-icon {
+  width: 4rem;
+  height: 4rem;
+  background-color: #dcfce7;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+#receiptContent .receipt-icon i {
+  color: #16a34a;
+  font-size: 1.5rem;
+}
+
+#receiptContent .receipt-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+#receiptContent .receipt-subtext {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+#receiptContent .receipt-details p {
+  font-size: 0.875rem;
+  color: #374151;
+  margin: 0.5rem 0;
+  text-align: left;
+}
+
+#receiptContent strong {
+  color: #111827;
+  display: inline-block;
+  min-width: 8rem;
+  text-align: right;
+  margin-right: 0.5rem;
+}
+
+#receiptContent span {
+  font-weight: 500;
+  color: #111827;
+}
+
+#receiptContent .footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+
+/* Walk-in Application Styles */
+.walk-in-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.walk-in-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.walk-in-btn:hover {
+  background-color: #3e8e41;
+}
+
+.walk-in-form {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 720px;
+  margin: 60px auto; /* Add vertical spacing */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  position: relative;
+  animation: fadeInUp 0.4s ease;
+  max-height: calc(100vh - 80px); /* Prevent it from overflowing screen */
+  overflow-y: auto;
+}
+
+.walk-in-steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  margin-top: 60px;
+  position: relative;
+  counter-reset: step;
+}
+
+.walk-in-steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #e0e0e0;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.step {
+  position: relative;
+  z-index: 2;
+  background: #e0e0e0;
+  color: #555;
+  padding: 12px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  width: 33%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ccc;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.step.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.step.active::before {
+  background-color: #4CAF50;
+}
+
+.step.completed {
+  background-color: #81C784;
+  color: white;
+}
+
+.step.completed::before {
+  background-color: #66BB6A;
+  content: '✓';
+}
+
+.walk-in-step[data-step="1"] {
+  display: block;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.name-group {
+  display: flex;
+  gap: 10px;
+}
+
+.name-group input {
+  flex: 1;
+}
+
+.walk-in-next, 
+.walk-in-prev,
+.walk-in-submit {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.walk-in-next, 
+.walk-in-submit {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.walk-in-next:hover, 
+.walk-in-submit:hover {
+  background-color: #3e8e41;
+}
+
+.walk-in-prev {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.walk-in-prev:hover {
+  background-color: #ddd;
+}
+
+.review-section {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.review-section h4 {
+  margin-top: 0;
+  color: #555;
+}
+
+/* Add this to your CSS */
+#visitDate, #visitTime {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.form-text {
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 5px;
 }

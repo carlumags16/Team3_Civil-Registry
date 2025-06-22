@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Signatory Dashboard | Civil Registry System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --primary: #0055a5;
+  --secondary: #bf0d3e;
+  --accent: #f9a51a;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --sidebar-width: 250px;
+  --received: #3498db;
+  --in-process: #f39c12;
+  --released: #2ecc71;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  transition: all 0.3s;
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.Dashboard {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: var(--dark);
+  text-decoration: none;
+  transition: all 0.3s;
+  border-left: 4px solid transparent;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #e3f2fd;
+  border-left: 4px solid var(--primary);
+}
+
+.menu-item i {
+  margin-right: 10px;
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  color: var(--primary);
+}
+
+#logout-btn {
+  color: #000;
+  background-color: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+#logout-btn:hover {
+  background-color: #fee;
+  border-left: 4px solid var(--danger);
+}
+
+#logout-btn i {
+  color: var(--danger);
+}
+
+#adminInfo {
+  color: rgba(86, 93, 99, 0.866);
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 25px;
+  transition: all 0.3s;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-title i {
+  color: var(--accent);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  text-align: right;
+}
+
+.user-info .name {
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.user-info .role {
+  font-size: 12px;
+  color: #666;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Dashboard Filters */
+.dashboard-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
+}
+
+.filter-select, .filter-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  transition: all 0.3s;
+}
+
+.filter-select:focus, .filter-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 85, 165, 0.1);
+  outline: none;
+}
+
+/* Certificate Stats */
+.certificate-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-top: 4px solid var(--primary);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.birth { border-top-color: #3498db; }
+.stat-card.marriage { border-top-color: #e74c3c; }
+.stat-card.death { border-top-color: #2c3e50; }
+.stat-card.cenomar { border-top-color: #9b59b6; }
+.stat-card.cenodeath { border-top-color: #1abc9c; }
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.stat-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+}
+
+.stat-icon {
+  font-size: 24px;
+  color: inherit;
+}
+
+.stat-values {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.stat-value {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.received { color: var(--received); }
+.in-process { color: var(--in-process); }
+.released { color: var(--released); }
+
+/* Documents Table */
+.documents-table-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.table-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--received);
+}
+
+#exportBtn {
+  background-color: var(--primary);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+
+}
+
+#exportBtn:hover {
+  background-color: var(--received);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  font-weight: 600;
+  color: #555;
+  background-color: #f9f9f9;
+  position: sticky;
+  top: 0;
+}
+
+tr:hover {
+  background-color: #f5f7fa;
+}
+
+.certificate-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.certificate-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.certificate-icon.birth { background-color: #3498db; }
+.certificate-icon.marriage { background-color: #e74c3c; }
+.certificate-icon.death { background-color: #2c3e50; }
+.certificate-icon.cenomar { background-color: #9b59b6; }
+.certificate-icon.cenodeath { background-color: #1abc9c; }
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-badge.received {
+  background-color: #ebf5fb;
+  color: var(--received);
+}
+
+.status-badge.in-process {
+  background-color: #fef5e7;
+  color: var(--in-process);
+}
+
+.status-badge.released {
+  background-color: #e8f8f0;
+  color: var(--released);
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  background-color: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn:hover { background-color: #e3f2fd; }
+.action-btn.sign { color: var(--success); }
+.action-btn.view { color: var(--primary); }
+
+/* Signature Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-title i { color: var(--primary); }
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-modal:hover {
+  color: var(--danger);
+  background-color: #fee;
+}
+
+.modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.document-preview {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.document-header {
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.document-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+
+.document-content { line-height: 1.6; }
+.signature-area {
+  margin-top: 40px;
+  text-align: right;
+}
+
+.signature-line {
+  display: inline-block;
+  width: 200px;
+  border-top: 1px solid #000;
+  margin-top: 60px;
+  position: relative;
+}
+
+.signature-label {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+  color: #555;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .main-content { padding: 20px; }
+  .certificate-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  .sidebar-header span,
+  .menu-item span {
+    display: none;
+  }
+  .menu-item {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  .menu-item i {
+    margin-right: 0;
+    font-size: 20px;
+  }
+  .main-content {
+    margin-left: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .user-profile {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .certificate-stats {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-filters {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .main-content { padding: 15px; }
+  .modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+  .table-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+</style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+  <div class="sidebar-header">
+    <h2 class="Dashboard">Admin Dashboard</h2>
+    <p id="adminInfo"></p>
+  </div>
+  <nav class="sidebar-nav">
+
+    <!-- Super Admin Only -->
+    <a href="#" class="menu-item" data-role="Super Admin">
+      <i class="fas fa-users-cog mr-2"></i> Manage Admin Users
+    </a>
+    <a href="#" class="menu-item" data-role="Super Admin">
+      <i class="fas fa-database mr-2"></i> All Transactions
+    </a>
+
+    <!-- Shared/Dashboard -->
+    <!-- APPLICATION, PROCESSING, AND INTAKE Clerk -->
+    <a href="../AdminPortal/AdminDashboard.html" class="menu-item" data-visible-to="all">
+      <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+    </a>
+
+    <!-- Verifying Officer -->
+    <a href="../Roles/VerifierAdmin.html" class="menu-item" data-role="Verifying Officer">
+      <i class="fas fa-tasks mr-2"></i> Validate Requests
+    </a>
+
+     <!-- Cashier Admin -->
+    <a href="../Roles/CashierAdmin.html" class="menu-item" data-role="Cashier">
+      <i class="fas fa-money-check-alt mr-2"></i> Transaction Payments
+    </a>
+
+    <!-- Document Signatory Officer -->
+    <a href="../Roles/SignatoryAdmin.html" class="menu-item" data-role="Document Signatory Officer">
+      <i class="fas fa-signature mr-2"></i> Signature
+    </a>
+
+    <!-- Releasing Officer -->
+    <a href="../Roles/ReleasingAdmin.html" class="menu-item" data-role="Releasing Officer">
+      <i class="fas fa-file mr-2"></i> Document Releasing
+    </a>
+
+    <!-- Report Admin -->
+    <a href="../Roles/ReportAdmin.html" class="menu-item" data-role="Report Officer">
+      <i class="fas fa-chart-line mr-2"></i> Reports
+    </a>
+
+    <!-- Help Desk -->
+    <a href="../Roles/HelpAdmin.html" class="menu-item" data-role="Help Desk Officer">
+      <i class="fas fa-comments mr-2"></i> Inquiries
+    </a>
+
+
+    <!-- Shared/Logout -->
+    <button onclick="logout()" id="logout-btn" class="menu-item logout-btn" data-visible-to="all">
+      <i class="fas fa-sign-out-alt mr-2"></i> Log out
+    </button>    
+ 
+  </nav>
+</aside>
+  <!-- Main Content Area -->
+<main class="main-content">
+  <!-- Top Navigation Bar -->
+  <div class="top-nav">
+    <h1 class="page-title">
+      <i class="fas fa-signature"></i> Document Signatory Dashboard
+    </h1>
+    <div class="user-profile">
+      <div class="user-info">
+        <div id="adminUsername" class="name"></div>
+        <div id="adminRole" class="role"></div>
+      </div>
+      <div class="user-avatar" id="userAvatar">DS</div>
+    </div>
+  </div>
+
+  <!-- Dashboard Filters -->
+  <div class="dashboard-filters">
+    <div class="filter-group">
+      <label class="filter-label">Certificate Type</label>
+      <select class="filter-select" id="certificateTypeFilter">
+        <option value="all">All Certificate Types</option>
+        <option value="birth">Birth Certificate</option>
+        <option value="marriage">Marriage Certificate</option>
+        <option value="death">Death Certificate</option>
+        <option value="cenomar">CENOMAR</option>
+        <option value="cenodeath">CENODEATH</option>
+        <option value="correction">Document Correction | R.A 9048 </option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Status</label>
+      <select class="filter-select" id="statusFilter">
+        <option value="all">All Statuses</option>
+        <option value="received">Received</option>
+        <option value="in-process">In Process</option>
+        <option value="released">Released</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Date Range</label>
+      <input type="date" class="filter-input" id="dateFrom">
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">To</label>
+      <input type="date" class="filter-input" id="dateTo">
+    </div>
+  </div>
+
+  <!-- Certificate Statistics -->
+  <div class="certificate-stats">
+    <div class="stat-card birth">
+      <div class="stat-header">
+        <div class="stat-title">Birth Certificates</div>
+        <i class="fas fa-baby stat-icon" style="color:#3498db;"></i>
+      </div>
+      <div class="stat-values">
+        <div class="stat-value">
+          <div class="stat-number received"></div>
+          <div class="stat-label">Received</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number in-process"></div>
+          <div class="stat-label">In Process</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number released"></div>
+          <div class="stat-label">Released</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card marriage">
+      <div class="stat-header">
+        <div class="stat-title">Marriage Certificates</div>
+        <i class="fas fa-ring stat-icon" style="color:#e74c3c;"></i>
+      </div>
+      <div class="stat-values">
+        <div class="stat-value">
+          <div class="stat-number received"></div>
+          <div class="stat-label">Received</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number in-process"></div>
+          <div class="stat-label">In Process</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number released"></div>
+          <div class="stat-label">Released</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card death">
+      <div class="stat-header">
+        <div class="stat-title">Death Certificates</div>
+        <i class="fas fa-cross stat-icon" style="color:#2c3e50;"></i>
+      </div>
+      <div class="stat-values">
+        <div class="stat-value">
+          <div class="stat-number received"></div>
+          <div class="stat-label">Received</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number in-process"></div>
+          <div class="stat-label">In Process</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number released"></div>
+          <div class="stat-label">Released</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card cenomar">
+      <div class="stat-header">
+        <div class="stat-title">CENOMAR</div>
+        <i class="fas fa-user-friends stat-icon" style="color:#9b59b6;"></i>
+      </div>
+      <div class="stat-values">
+        <div class="stat-value">
+          <div class="stat-number received"></div>
+          <div class="stat-label">Received</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number in-process"></div>
+          <div class="stat-label">In Process</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number released"></div>
+          <div class="stat-label">Released</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card cenodeath">
+      <div class="stat-header">
+        <div class="stat-title">CENODEATH</div>
+        <i class="fas fa-book-dead stat-icon" style="color:#1abc9c;"></i>
+      </div>
+      <div class="stat-values">
+        <div class="stat-value">
+          <div class="stat-number received"></div>
+          <div class="stat-label">Received</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number in-process"></div>
+          <div class="stat-label">In Process</div>
+        </div>
+        <div class="stat-value">
+          <div class="stat-number released"></div>
+          <div class="stat-label">Released</div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Documents Table -->
+<div class="documents-table-container">
+  <div class="section-header">
+    <h2 class="section-title">Documents for Signature</h2>
+    <div class="table-actions">
+        <div class="Export-wrapper">
+        <button type="button" id="exportBtn">
+          <i class="fas fa-print"></i> Export
+        </button>
+        </div>      
+        <button class="btn btn-primary"><i class="fas fa-sync-alt"></i> Refresh</button>
+    </div>
+  </div>
+ <div id="printArea">
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Document ID</th>
+          <th>Certificate Type</th>
+          <th>Requested By</th>
+          <th>Date Requested</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  </div>
+</div>
+<!-- Signature Modal -->
+<div class="modal" id="signatureModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fas fa-signature"></i> Sign Document</h3>
+      <button class="close-modal" onclick="closeSignatureModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="document-info">
+        <div class="detail-item">
+          <div class="detail-label">Document ID</div>
+          <div class="detail-value"></div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Certificate Type</div>
+          <div class="detail-value"></div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Requested By</div>
+          <div class="detail-value"></div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Date Requested</div>
+          <div class="detail-value"></div>
+        </div>
+      </div>
+
+      <div class="document-preview">
+        <div class="document-header">
+          <div class="document-title"></div>
+          <div>Republic of the Philippines</div>
+        </div>
+        <div class="document-content">
+          <p></p>
+        </div>
+        <div class="signature-area">
+          <div class="signature-line">
+            <div class="signature-label">Authorized Signatory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeSignatureModal()"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn btn-primary"><i class="fas fa-check"></i> Confirm Signature</button>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="rolesidebarVisibility.js"></script>
+<script src="SignatoryAdmin.js"></script>
+</body>
+</html>

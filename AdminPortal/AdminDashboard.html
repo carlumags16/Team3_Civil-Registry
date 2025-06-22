@@ -12,15 +12,54 @@
 <body>
   <div class="flex min-h-screen">
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2 class="Dashboard" style="font-weight: bold; font-size: 24px;">Admin Dashboard</h2>
-      </div>
-      <nav class="sidebar-nav">
-        <a href="#" class="active"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
-        <!--<button onclick="website()"><a href="#"><i class="fas fa-globe mr-2"></i> Website</a></button>-->
-        <button onclick="logout()"><a href="#"><i class="fas fa-sign-in-alt"></i> Log out</a></button>
-      </nav>
-    </aside>
+  <div class="sidebar-header">
+    <h2 class="Dashboard">Admin Dashboard</h2>
+    <p id="adminInfo"></p>
+  </div>
+  <nav class="sidebar-nav">
+
+    <!-- Shared/Dashboard -->
+    <!-- Receiving Clerk -->
+    <a href="AdminDashboard.html" class="menu-item" data-visible-to="all">
+      <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+    </a>
+
+    <!-- Verifying Officer -->
+    <a href="../Roles/VerifierAdmin.html" class="menu-item" data-role="Verifying Officer">
+      <i class="fas fa-tasks mr-2"></i> Validate Requests
+    </a>
+
+     <!-- Cashier Admin -->
+    <a href="../Roles/CashierAdmin.html" class="menu-item" data-role="Cashier">
+      <i class="fas fa-money-check-alt mr-2"></i> Transaction Payments
+    </a>
+
+    <!-- Document Signatory Officer -->
+    <a href="../Roles/SignatoryAdmin.html" class="menu-item" data-role="Document Signatory Officer">
+      <i class="fas fa-signature mr-2"></i> Signature
+    </a>
+
+    <!-- Releasing Officer -->
+    <a href="../Roles/ReleasingAdmin.html" class="menu-item" data-role="Releasing Officer">
+      <i class="fas fa-file mr-2"></i> Document Releasing
+    </a>
+
+    <!-- Report Admin -->
+    <a href="../Roles/ReportAdmin.html" class="menu-item" data-role="Report Officer">
+      <i class="fas fa-chart-line mr-2"></i> Reports
+    </a>
+
+    <!-- Help Desk -->
+    <a href="../Roles/HelpAdmin.html" class="menu-item" data-role="Help Desk Officer">
+      <i class="fas fa-comments mr-2"></i> Inquiries
+    </a>
+
+    <!-- Shared/Logout -->
+    <button onclick="logout()" class="menu-item logout-btn" data-visible-to="all">
+      <i class="fas fa-sign-out-alt mr-2"></i> Log out
+    </button>
+  </nav>
+</aside>
     <main class="main-content">
       <h1 class="text-2xl font-bold mb-6">Certificate Management</h1>
       
@@ -50,7 +89,10 @@
           <select id="statusFilter" class="filter-input">
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
+            <option value="received">Received</option>
+            <option value="processing">Processing</option>
             <option value="approved">Approved</option>
+            <option value="released">Released</option>
             <option value="rejected">Rejected</option>
           </select>
         </div>
@@ -78,9 +120,10 @@
             </select>
             <span class="text-sm">entries</span>
           </div>
-          <!--<button id="exportBtn" class="btn" style="background-color: var(--success-color); color: white;">
-            <i class="fas fa-file-export mr-2"></i> Export
-          </button>-->
+          <div class="Export-wrapper">
+            <button type="button" id="exportBtn">
+              <i class="fas fa-print"></i> Export</button>
+          </div>
         </div>
         
         <table class="data-table">

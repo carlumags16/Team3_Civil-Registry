@@ -80,6 +80,7 @@ $result_full = $stmt->get_result();
   <div class="header-right">
     <nav class="nav-links">
       <a href="#" data-translate="aboutus" onclick="openAboutPopup()">About us</a>
+      <a href="../index.html">FAQs</a>
 
       <div id="userIconContainer">
         <i class="fas fa-user-circle" id="userIcon"></i>
@@ -230,7 +231,10 @@ $result_full = $stmt->get_result();
             <!-- Progress Bar -->
             <ul class="progressbar" id="progressbar">
                 <li class="active">Information</li>
+                <li>Verification</li>
                 <li>Review</li>
+                <li>Payment</li>
+                <li>Receipt</li>
             </ul>
 
             <form id="certificateForm" action="handle_certificate.php" method="post">
@@ -766,57 +770,231 @@ $result_full = $stmt->get_result();
                                 placeholder="Number of copies needed" />
                         </div>
                     </div>
-                    <button type="button" id="nextBtn" onclick="changeStep(1)">Next</button>
+                    <button type="button" id="nextBtn">Next <i class="fas fa-arrow-right ml-2"></i></button>
 
                 </div>
 
-                <!-- Step 2: Review -->
-                <div class="form-step" data-step="1">
-                    <h3>Review Your Information</h3>
-                    <p>Please verify all your data before submitting.</p>
-                    <div id="reviewSummary" class="review-summary"></div>
-                    <button type="button" id="prevBtn">Previous</button>
-                    <button type="button" id="downloadBtn">Download PDF</button>
-                    <button type="submit" id="submitBtn">Submit</button>
+                <!-- Step 2 -->
+            <div class="form-step" data-step="1">
+                <label for="uploadID">Upload a valid ID:</label>
+                <input type="file" id="idImage" name="uploadID" accept="image/*,application/pdf" required>
+                <button type="button" id="prevBtn"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
+                <button type="button" id="nextStep2Btn">Next  <i class="fas fa-arrow-right ml-2"></i> </button> <!-- ✅ unique ID -->
+            </div>
+
+                <!-- Step 3 -->
+            <div class="form-step" data-step="2">
+            <div id="reviewSummary" class="review-summary"></div>
+                <button type="button" id="downloadBtn">Download PDF <i class="fas fa-download"></i></button>
+                <button type="button" id="verificationPrevBtn"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
+                <button type="button" id="goToPaymentBtn">Proceed to Payment <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+                <!-- STEP 4: Updated Payment UI -->
+                <div class="form-step" data-step="3">
+                <h2 class="payment-title">Payment Method</h2>
+
+                <div class="payment-methods">
+                <!-- QR CODE -->
+                <div class="payment-card qr-container" onclick="selectPayment('qr')">
+                    <div class="payment-header">
+                    <div class="icon-wrapper qr-icon"><i class="fas fa-qrcode"></i></div>
+                    <div>
+                        <h3>QR Code</h3>
+                        <p>Scan to pay</p>
+                    </div>
+                    </div>
+                    <div id="qrDetails" class="payment-details hidden">
+                    <div class="qr-content">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Payment" alt="QR Code">
+                        <p>Scan this QR code to complete payment</p>
+                    </div>
+                    </div>
                 </div>
-        </div>
+
+                <!-- E-WALLET -->
+                <div class="payment-card" onclick="selectPayment('ewallet')">
+                    <div class="payment-header">
+                    <div class="icon-wrapper ewallet-icon"><i class="fas fa-wallet"></i></div>
+                    <div>
+                        <h3>E-Wallet</h3>
+                        <p>GCash, Maya</p>
+                    </div>
+                    </div>
+                    <div id="ewalletDetails" class="payment-details hidden">
+                    <select>
+                        <option value="">Select E-Wallet</option>
+                        <option>GCash</option>
+                        <option>Maya</option>
+                    </select>
+                    <input type="text" id="ewalletNumber" placeholder="Account Number">
+                    <button type="button" onclick="sendOTP('ewallet')">Send OTP</button>
+                    <div id="ewalletOtpSection" class="otp-section hidden">
+                        <p>Enter OTP sent to your mobile</p>
+                        <div class="otp-inputs">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        </div>
+                    <a href="#" onclick="event.preventDefault(); resendOTP('ewallet')" id="resend-ewallet">Resend (300s)</a>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- BANK TRANSFER -->
+                <div class="payment-card" onclick="selectPayment('bank')">
+                    <div class="payment-header">
+                    <div class="icon-wrapper bank-icon"><i class="fas fa-university"></i></div>
+                    <div>
+                        <h3>Bank Transfer</h3>
+                        <p>BDO, BPI, etc.</p>
+                    </div>
+                    </div>
+                    <div id="bankDetails" class="payment-details hidden">
+                    <select>
+                        <option value="">Select Bank</option>
+                        <option>BDO</option>
+                        <option>BPI</option>
+                        <option>Metrobank</option>
+                    </select>
+                    <input type="text" id="bankAccount" placeholder="Account Number">
+                    <button type="button" onclick="sendOTP('bank')">Send OTP</button>
+                    <div id="bankOtpSection" class="otp-section hidden">
+                        <p>Enter OTP sent to your mobile</p>
+                        <div class="otp-inputs">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        <input type="text" maxlength="1" class="otp-box">
+                        </div>
+                        <p class="resend-text">Didn't receive OTP? <a href="#" onclick="resendOTP('bank')" id="resend-bank">Resend (300s)</a></p>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- OVER THE COUNTER -->
+                <div class="payment-card" onclick="selectPayment('otc')">
+                    <div class="payment-header">
+                    <div class="icon-wrapper otc-icon"><i class="fas fa-store"></i></div>
+                    <div>
+                        <h3>Over the Counter</h3>
+                        <p>7/11, Bayad Center</p>
+                    </div>
+                    </div>
+                    <div id="otcDetails" class="payment-details hidden">
+                    <select>
+                        <option value="">Select OTC</option>
+                        <option>7/11</option>
+                        <option>Bayad Center</option>
+                        <option>Palawan</option>
+                    </select>
+                    <p>Present reference ID when paying at your selected center.</p>
+                    </div>
+                </div>
+                </div>
+
+                <!-- 📦 Payment Summary Section -->
+                <div class="payment-summary">
+                <h3 class="summary-title">Payment Summary</h3>
+
+                <p class="summary-text">
+                    Certificate Type:
+                    <span id="paymentCertificateType" class="summary-highlight"></span>
+                </p>
+
+                <p class="summary-text">
+                    Price per Certificate: ₱<span id="basePrice">350</span>
+                </p>
+
+                <p class="summary-text">
+                    Reference ID: <strong id="referenceId"></strong>
+                </p>
+
+                <label for="quantity" class="summary-label">Quantity of Certificates</label>
+                <input
+                    type="number"
+                    id="quantity"
+                    value="1"
+                    min="1"
+                    class="summary-input"
+                    oninput="updateTotalPrice()"
+                />
+
+                <div class="summary-totals">
+                    <p>Total: ₱<span id="totalAmount">0</span></p>
+                    <p>Convenience Fee: ₱<span id="convenienceFee">10</span></p>
+                    <p class="summary-final">Final Amount: ₱<span id="finalAmount">0</span></p>
+                </div>
+                </div>
+
+
+
+                <div class="flex justify-end mt-6">
+                    <button type="button" onclick="verifyAndProceed()" class="bg-blue-600 text-white py-2 px-6 rounded-lg">Proceed</button>
+                </div>
+                </div>
+
+                <!-- Step 5: Receipt -->
+                <div class="form-step" data-step="4">
+                <div id="receiptContent">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-600 text-3xl"></i>
+                </div>
+                    <h2>Payment Receipt</h2>
+                    <p class="text-gray-600 mb-6">Thank you for your registration. Here's your receipt.</p>
+                    <p><strong>Reference ID:</strong> <span id="receiptReferenceId"></span></p>
+                    <p><strong>Date & Time:</strong> <span id="receiptDate"></span></p>
+                    <p><strong>Payment Method:</strong> <span id="receiptPaymentMethod"></span></p>
+                    <p><strong>Amount Paid:</strong> ₱<span id="receiptAmount"></span></p>
+                </div>
+
+                <div class="flex gap-4 mt-4">
+                    <button type="button" id="downloadReceiptBtn" class="bg-green-600 text-white px-4 py-2 rounded">Download Receipt (PDF)</button>
+                    <button type="submit" id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+                </div>
+                </div>
         </form>
     </div>
     </div>
 
     <div class="table-container">
-        <div class="table-header">
-            <h2 class="table-title">Registered Certificates</h2>
-        </div>
-        <div class="table-wrapper">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID Number</th>
-                        <th>UserName</th>
-                        <th>Certificate Type</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="registrationTableBody">
-                    <?php
-                    if ($result_full && $result_full->num_rows > 0) {
-                        while ($row = $result_full->fetch_assoc()) {
-                            echo "<tr>
-                    <td>" . htmlspecialchars($row['reg_id']) . "</td>
-                    <td>" . htmlspecialchars($row['username']) . "</td>
-                    <td>" . htmlspecialchars($row['certif_type']) . "</td>
-                    <td>" . htmlspecialchars($row['status']) . "</td>
-                    </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='4'>No registrations found.</td></tr>";
+    <div class="table-header">
+        <h2 class="table-title">Registered Certificates</h2>
+    </div>
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>UserName</th>
+                    <th>Certificate Type</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="registrationTableBody">
+                <?php
+                if ($result_full && $result_full->num_rows > 0) {
+                    while ($row = $result_full->fetch_assoc()) {
+                        echo "<tr>
+                <td>" . htmlspecialchars($row['reg_id']) . "</td>
+                <td>" . htmlspecialchars($row['username']) . "</td>
+                <td>" . htmlspecialchars($row['certif_type']) . "</td>
+                <td>" . htmlspecialchars($row['status']) . "</td>
+                </tr>";
                     }
-                    ?>
-                </tbody>
-            </table>
-
-        </div>
+                } else {
+                    echo "<tr><td colspan='4'>No registrations found.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
     </div>
 
 <div id="pdfTemplate">

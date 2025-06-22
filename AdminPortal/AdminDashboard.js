@@ -12,10 +12,41 @@ let currentState = {
   statusFilter: 'all'
 };
 
+const adminRole = localStorage.getItem('adminRole') || 'Guest';
+
 document.addEventListener('DOMContentLoaded', () => {
+  //  Show Admin Role in Sidebar 
+  const adminUser = localStorage.getItem('adminUsername');
+  if (adminUser && adminRole) {
+    const infoBox = document.getElementById('adminInfo');
+    if (infoBox) {
+      infoBox.textContent = `(${adminRole})`;
+    }
+  }
+
+  //  Role-based Menu Visibility
+  document.querySelectorAll('.menu-item').forEach(item => {
+    const role = item.dataset.role;
+    const visibleTo = item.dataset.visibleTo;
+
+    if (visibleTo === 'all') {
+      item.style.display = 'block';
+    } else if (!role) {
+      item.style.display = 'none';
+    } else if (adminRole === 'Super Admin') {
+      item.style.display = 'block';
+    } else if (role === adminRole) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+
+  //  Load data and set event listeners
   fetchData();
   setupEventListeners();
 });
+
 
 function fetchData() {
   // Build query parameters
@@ -150,22 +181,20 @@ function renderTable() {
       'cenodeath': 'Cenodeath Certificate'
     }[item.type] || item.type;
 
+    const canApprove = ['Super Admin', 'Verifying Officer'].includes(adminRole);
+    const canReject = ['Super Admin', 'Verifying Officer'].includes(adminRole);
+    const canView = true; // everyone can view
+
     row.innerHTML = `
       <td>${item.id}</td>
-      <td>${item.username}</td>
+      <td>${item.name}</td>
       <td>${typeDisplay}</td>
       <td>${formatDate(item.date)}</td>
       <td><span class="badge ${statusClass}">${capitalizeFirstLetter(item.status)}</span></td>
       <td>
-        <button class="action-btn action-btn-view" data-id="${item.id}" data-action="view">
-          <i class="fas fa-eye"></i> View
-        </button>
-        <button class="action-btn action-btn-approve" data-id="${item.id}" data-action="approve">
-          <i class="fas fa-check"></i> Approve
-        </button>
-        <button class="action-btn action-btn-reject" data-id="${item.id}" data-action="reject">
-          <i class="fas fa-times"></i> Reject
-        </button>
+        ${canView ? `<button class="action-btn action-btn-view" data-id="${item.id}" data-action="view"><i class="fas fa-eye"></i> View</button>` : ''}
+        ${canApprove ? `<button class="action-btn action-btn-approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>` : ''}
+        ${canReject ? `<button class="action-btn action-btn-reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i> Reject</button>` : ''}
       </td>
     `;
     tbody.appendChild(row);

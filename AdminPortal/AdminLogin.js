@@ -12,11 +12,6 @@ const errorMessage = document.getElementById('errorMessage');
 const successMessage = document.getElementById('successMessage');
 const loginBtn = document.getElementById('loginBtn');
 
-const ADMIN_CREDENTIALS = {
-    username: "admin",
-    password: "Admin@123"
-};
-
 loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -38,8 +33,14 @@ loginForm.addEventListener('submit', function (e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
+            // ✅ Store session and role info
+            sessionStorage.setItem("isAdmin", "true");
+            localStorage.setItem("adminUsername", data.username);
+            localStorage.setItem("adminRole", data.role);
+
             successMessage.style.display = 'block';
             successMessage.textContent = data.message;
+
             setTimeout(() => {
                 window.location.href = 'AdminDashboard.html';
             }, 1000);
@@ -52,9 +53,10 @@ loginForm.addEventListener('submit', function (e) {
         errorMessage.textContent = err.message;
         loginBtn.disabled = false;
         loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
     });
 });
-
 
 document.getElementById('username').addEventListener('input', hideError);
 document.getElementById('password').addEventListener('input', hideError);
