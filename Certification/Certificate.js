@@ -797,3 +797,227 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+
+  // --- Open and Reset Form ---
+  function openWalkInForm() {
+    document.getElementById('walkInPopup').style.display = 'flex';
+    resetWalkInForm();
+  }
+
+  function closeWalkInForm() {
+    document.getElementById('walkInPopup').style.display = 'none';
+  }
+
+  function resetWalkInForm() {
+    document.querySelectorAll('.walk-in-step').forEach(step => step.style.display = 'none');
+    document.querySelector('.walk-in-step[data-step="1"]').style.display = 'block';
+
+    document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+    document.querySelector('.step[data-step="1"]').classList.add('active');
+
+    document.getElementById('walkInApplicationForm').reset();
+  }
+
+  // --- Navigation ---
+  window.nextWalkInStep = function (currentStep) {
+    if (!validateWalkInStep(currentStep)) return;
+    document.querySelector(`.walk-in-step[data-step="${currentStep}"]`).style.display = 'none';
+    const nextStep = currentStep + 1;
+    document.querySelector(`.walk-in-step[data-step="${nextStep}"]`).style.display = 'block';
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${nextStep}"]`).classList.add('active');
+    if (nextStep === 4) populateWalkInReview();
+  }
+
+  window.prevWalkInStep = function (currentStep) {
+    document.querySelector(`.walk-in-step[data-step="${currentStep}"]`).style.display = 'none';
+    const prevStep = currentStep - 1;
+    document.querySelector(`.walk-in-step[data-step="${prevStep}"]`).style.display = 'block';
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${prevStep}"]`).classList.add('active');
+  }
+
+  // --- Validation ---
+  function validateWalkInStep(step) {
+    if (step === 1) {
+      const firstName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="First Name"]').value;
+      const lastName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="Last Name"]').value;
+      const dob = document.querySelector('.walk-in-step[data-step="1"] input[type="date"]').value;
+      if (!firstName || !lastName || !dob) {
+        Swal.fire('Validation Error', 'Please fill in all required fields', 'error');
+        return false;
+      }
+    }
+    if (step === 2) {
+      const certType = document.getElementById('walkInCertType').value;
+      if (!certType) {
+        Swal.fire('Validation Error', 'Please select a certificate type', 'error');
+        return false;
+      }
+    }
+    if (step === 3) {
+      const date = document.getElementById('appointmentDate').value;
+      const time = document.getElementById('appointmentTime').value;
+      if (!date || !time) {
+        Swal.fire('Validation Error', 'Please choose a valid date and time for your appointment.', 'error');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // --- Review Population ---
+  function populateWalkInReview() {
+    const generatedID = generateRandomId();
+    document.getElementById('walkInGeneratedID').textContent = generatedID;
+    document.getElementById('walkInGeneratedID').setAttribute('data-id', generatedID);
+
+    const firstName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="First Name"]').value;
+    const lastName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="Last Name"]').value;
+    const middleName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="Middle Name"]').value;
+    const dob = document.querySelector('.walk-in-step[data-step="1"] input[type="date"]').value;
+    const gender = document.querySelector('.walk-in-step[data-step="1"] select').value;
+    const contact = document.querySelector('.walk-in-step[data-step="1"] input[type="tel"]').value;
+
+    document.getElementById('walkInPersonalReview').innerHTML = `
+      <p><strong>Name:</strong> ${firstName} ${middleName ? middleName + ' ' : ''}${lastName}</p>
+      <p><strong>Date of Birth:</strong> ${new Date(dob).toLocaleDateString()}</p>
+      <p><strong>Gender:</strong> ${gender}</p>
+      <p><strong>Contact:</strong> ${contact}</p>
+    `;
+
+    const certType = document.getElementById('walkInCertType').value;
+    const purpose = document.querySelector('.walk-in-step[data-step="2"] select').value;
+    const copies = document.querySelector('.walk-in-step[data-step="2"] input[type="number"]').value;
+
+    const date = document.getElementById('appointmentDate').value;
+    const time = document.getElementById('appointmentTime').value;
+    const dateTime = date && time ? `<p><strong>Scheduled Visit:</strong> ${new Date(date).toLocaleDateString()} at ${time}</p>` : '';
+
+    document.getElementById('walkInCertReview').innerHTML = `
+      <p><strong>Certificate Type:</strong> ${certType}</p>
+      <p><strong>Purpose:</strong> ${purpose}</p>
+      <p><strong>Number of Copies:</strong> ${copies}</p>
+      ${dateTime}
+    `;
+  }
+
+  // --- Submit Handler ---
+  document.getElementById('WalkinSubmit').addEventListener('click', (e) => {
+    e.preventDefault();
+    Swal.fire({
+      icon: 'success',
+      title: 'Registration Submitted Successfully!',
+      text: 'Your payment and registration have been recorded.',
+      confirmButtonColor: '#3b82f6'
+    }).then(() => {
+      closeWalkInForm();
+      const firstName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="First Name"]').value;
+      const lastName = document.querySelector('.walk-in-step[data-step="1"] input[placeholder="Last Name"]').value;
+      const certType = document.getElementById('walkInCertType').value;
+      const walkInId = document.getElementById('walkInGeneratedID').getAttribute('data-id');
+
+      addToRegistrationTable({
+        id: walkInId,
+        name: `${firstName} ${lastName}`,
+        type: certType,
+        status: 'Pending'
+      });
+    });
+  });
+
+  // --- Utility ---
+  function generateRandomId() {
+    return 'WI-' + Math.floor(100000 + Math.random() * 900000);
+  }
+
+  function addToRegistrationTable(data) {
+    const tableBody = document.getElementById('registrationTableBody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${data.id}</td>
+      <td>${data.name}</td>
+      <td>${data.type}</td>
+      <td><span class="status-badge ${data.status.toLowerCase()}">${data.status}</span></td>
+    `;
+    tableBody.appendChild(row);
+  }
+
+  // --- Flatpickr & Time Options ---
+  if (document.getElementById('appointmentDate')) {
+    flatpickr('#appointmentDate', {
+      dateFormat: "Y-m-d",
+      minDate: new Date().fp_incr(1),
+      disable: [
+        function (date) {
+          return date.getDay() === 0 || date.getDay() === 6;
+        }
+      ]
+    });
+
+    const timeSelect = document.getElementById('appointmentTime');
+    for (let hour = 9; hour <= 16; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const timeString = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        const option = new Option(timeString, timeString);
+        timeSelect.add(option);
+      }
+    }
+  }
+
+  // --- Certificate Type Switch ---
+  document.getElementById('walkInCertType').addEventListener('change', function () {
+    const certType = this.value;
+    const fieldsContainer = document.getElementById('walkInCertFields');
+    let fieldsHTML = '';
+
+    switch (certType) {
+      case 'birth':
+        fieldsHTML = `<div class="form-group">
+        <label>Child's Name</label>
+        <div class="name-group">
+        <input type="text" placeholder="First Name" required>
+        <input type="text" placeholder="Last Name" required>
+        <input type="text" placeholder="Middle Name">
+        </div>
+        </div>
+        <div class="form-row"><div class="form-group"><label>Date of Birth</label>
+        <input type="date" required></div>
+        <div class="form-group"><label>Place of Birth</label>
+        <input type="text" placeholder="City/Municipality" required></div></div>`;
+        break;
+      case 'marriage':
+        fieldsHTML = `<div class="form-group"><label>Husband's Name</label><div class="name-group"><input type="text" placeholder="First Name" required><input type="text" placeholder="Last Name" required><input type="text" placeholder="Middle Name"></div></div><div class="form-group"><label>Wife's Name</label><div class="name-group"><input type="text" placeholder="First Name" required><input type="text" placeholder="Last Name" required><input type="text" placeholder="Middle Name (Maiden)"></div></div><div class="form-row"><div class="form-group"><label>Date of Marriage</label><input type="date" required></div><div class="form-group"><label>Place of Marriage</label><input type="text" placeholder="City/Municipality" required></div></div>`;
+        break;
+      case 'death':
+        fieldsHTML = `<div class="form-group"><label>Deceased's Name</label><div class="name-group"><input type="text" placeholder="First Name" required><input type="text" placeholder="Last Name" required><input type="text" placeholder="Middle Name"></div></div><div class="form-row"><div class="form-group"><label>Date of Death</label><input type="date" required></div><div class="form-group"><label>Place of Death</label><input type="text" placeholder="City/Municipality" required></div></div><div class="form-group"><label>Cause of Death</label><input type="text" placeholder="If known"></div>`;
+        break;
+      case 'cenomar':
+        fieldsHTML = `<div class="form-group"><label>Applicant's Name</label><div class="name-group"><input type="text" placeholder="First Name" required><input type="text" placeholder="Last Name" required><input type="text" placeholder="Middle Name"></div></div><div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date" required></div><div class="form-group"><label>Place of Birth</label><input type="text" placeholder="City/Municipality" required></div></div>`;
+        break;
+      case 'cenodeath':
+        fieldsHTML = `<div class="form-group"><label>Person's Name</label><div class="name-group"><input type="text" placeholder="First Name" required><input type="text" placeholder="Last Name" required><input type="text" placeholder="Middle Name"></div></div><div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date"></div><div class="form-group"><label>Last Known Residence</label><input type="text" placeholder="City/Municipality"></div></div>`;
+        break;
+      case 'correction':
+        fieldsHTML = `<div class="form-group"><label>Person's Name</label><div class="name-group"><input type="text" placeholder="First Name" required><input type="text" placeholder="Last Name" required><input type="text" placeholder="Middle Name"></div></div><div class="form-row"><div class="form-group"><label>Date of Birth</label><input type="date"></div><div class="form-group"><label>Last Known Residence</label><input type="text" placeholder="City/Municipality"></div><div class="remark"><label>Reason for Document Correction</label><textarea rows="3"></textarea></div></div>`;
+        break;
+    }
+    fieldsContainer.innerHTML = fieldsHTML;
+  });
+
+  // --- PDF Download ---
+  window.downloadWalkInPDF = function () {
+    const element = document.getElementById('walkInSummaryPrintable');
+    html2pdf().set({
+      margin: 10,
+      filename: 'WalkIn_Application_Summary.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).from(element).save();
+  }
+
+  window.openWalkInForm = openWalkInForm;
+  window.closeWalkInForm = closeWalkInForm;
+});

@@ -28,9 +28,12 @@ $result_full = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="Certificate.css">
@@ -105,6 +108,189 @@ $result_full = $stmt->get_result();
 
     </p>
 </div>
+
+    <!-- Add this button near the top of your page, perhaps below the title section -->
+<div class="walk-in-container">
+  <button class="walk-in-btn" onclick="openWalkInForm()">
+    <i class="fas fa-user-clock"></i> Walk-in Application
+  </button>
+</div>
+
+<!-- Add this popup form at the bottom of your body, before the scripts -->
+<div class="popup-overlay" id="walkInPopup">
+  <div class="walk-in-form">
+    <span class="close-btn" onclick="closeWalkInForm()">&times;</span>
+    <h2>Walk-in Application Form</h2>
+    
+      <div class="walk-in-steps">
+        <div class="step active" data-step="1">1. Personal Info</div>
+        <div class="step" data-step="2">2. Certificate Details</div>
+        <div class="step" data-step="3">3. Schedule Visit</div>
+        <div class="step" data-step="4">4. Confirmation</div>
+      </div>
+    <hr><br>
+    
+    <form id="walkInApplicationForm">
+      <!-- Step 1: Personal Information -->
+      <div class="walk-in-step" data-step="1">
+        <h3>Applicant Information</h3><br>
+        <div class="form-group">
+          <label>Full Name</label>
+          <div class="name-group">
+            <input type="text" placeholder="First Name" required>
+            <input type="text" placeholder="Last Name" required>
+            <input type="text" placeholder="Middle Name">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" required>
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select required>
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" placeholder="+63" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        
+        
+        <div class="form-group">
+          <label>Valid ID Presented</label>
+          <select required>
+            <option value="">Select ID</option>
+            <option>Passport</option>
+            <option>Driver's License</option>
+            <option>UMID</option>
+            <option>SSS ID</option>
+            <option>PhilHealth ID</option>
+            <option>Other Government ID</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>ID Number</label>
+          <input type="text" placeholder="ID Number" required>
+        </div>
+        
+        <button type="button" class="walk-in-next" onclick="nextWalkInStep(1)">Next</button>
+      </div>
+      
+      <!-- Step 2: Certificate Details -->
+      <div class="walk-in-step" data-step="2">
+        <h3>Certificate Details</h3>
+        
+        <div class="form-group">
+          <label>Certificate Type</label>
+          <select id="walkInCertType" required>
+            <option value="">Select Certificate</option>
+            <option value="birth">Birth Certificate</option>
+            <option value="marriage">Marriage Certificate</option>
+            <option value="death">Death Certificate</option>
+            <option value="cenomar">CENOMAR</option>
+            <option value="cenodeath">CENODEATH</option>
+            <option value="correction">Document Correction | R.A 9048</option>
+          </select>
+        </div>
+        
+        <!-- Dynamic fields based on certificate type -->
+        <div id="walkInCertFields">
+          <!-- Fields will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="form-group">
+          <label>Purpose of Request</label>
+          <select required>
+            <option value="">Select Purpose</option>
+            <option>Personal Record</option>
+            <option>Legal Requirement</option>
+            <option>Government Transaction</option>
+            <option>Employment</option>
+            <option>Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Number of Copies</label>
+          <input type="number" min="1" max="5" value="1" required>
+        </div>
+        
+        <div class="form-row">
+          <button type="button" class="walk-in-prev" onclick="prevWalkInStep(2)">Previous</button>
+          <button type="button" class="walk-in-next" onclick="nextWalkInStep(2)">Next</button>
+        </div>
+      </div>
+      <!-- STEP 3 SCHEDULE-->
+<div class="walk-in-step" data-step="3" style="display: none;">
+  <h3>Schedule Your Visit</h3>
+  
+<div class="datetime-picker">
+  <div class="form-group">
+    <label for="appointmentDate">Date</label>
+    <input type="text" id="appointmentDate" name="date" class="form-input" required>
+  </div>
+  <div class="form-group">
+    <label for="appointmentTime">Time</label>
+    <select id="appointmentTime" name="time" class="form-select" required>
+      <option value="">-- Select Time --</option>
+      <!-- Options will be inserted dynamically -->
+    </select>
+  </div>
+</div>
+
+  
+  <div class="form-row">
+    <button type="button" class="walk-in-prev" onclick="prevWalkInStep(3)">Previous</button>
+    <button type="button" class="walk-in-next" onclick="nextWalkInStep(3)">Next</button>
+  </div>
+</div>
+      
+      <!-- Step 4: Confirmation -->
+      <div class="walk-in-step" data-step="4">
+        <h3>Review Your Application</h3>
+          <!-- Printable Section Start -->
+          <div id="walkInSummaryPrintable">
+            <div class="review-section">
+              <h4>Personal Information</h4>
+              <div id="walkInPersonalReview"></div>
+            </div>
+        
+        <div class="review-section">
+          <h4>Certificate Details</h4>
+          <div id="walkInCertReview"></div>
+        </div>
+        <div class="review-section">
+        <h4>Walk-in ID</h4>
+        <p id="walkInGeneratedID"></p>
+      </div>
+      </div>
+
+
+        <div class="form-row">
+          <button type="button" class="walk-in-prev" onclick="prevWalkInStep(3)">Previous</button>
+          <button type="submit" id="WalkinSubmit" class="walk-in-submit">Submit Application</button>
+          <button type="button" onclick="printWalkInSummary()" class="walk-in-submit">Print Summary</button>
+<button type="button" id="downloadWalkInSummaryPDF" class="walk-in-submit" onclick="downloadWalkInPDF()">Download PDF</button> 
+       </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 
     <div class="card-container">
         <!-- Birth Certificate -->

@@ -81,14 +81,14 @@
             </div>
         </div>
     </section>
-
+<!--
 <section class="appointment" id="appointment">
   <div class="container">
     <h2>Walk in application? Book Online to see available date and time!</h2>
     <p class="subtitle">Select a service, choose a date and time, and confirm your visit—fast and easy.</p>
     
     <div class="appointment-steps">
-      <!-- Step 1: Select Service and Email -->
+      <!-- Step 1: Select Service and Email 
       <div class="appointment-step">
         <div class="step-number">1</div>
         <h3>Your Information</h3>
@@ -113,7 +113,7 @@
 
       </div>
       
-      <!-- Step 2: Choose Date & Time -->
+      <!-- Step 2: Choose Date & Time 
       <div class="appointment-step">
         <div class="step-number">2</div>
         <h3>Choose Date & Time</h3>
@@ -126,14 +126,14 @@
             <label for="appointmentTime">Time</label>
             <select id="appointmentTime" name="time" class="form-select" required>
               <option value="">-- Select Time --</option>
-              <!-- Times will be populated by JavaScript -->
+              <!-- Times will be populated by JavaScript 
             </select>
           </div>
         </div>
         <p class="note">Note: Appointments available from 9AM to 4PM, Monday to Friday</p>
       </div>
       
-      <!-- Step 3: Confirm Details -->
+      <!-- Step 3: Confirm Details 
       <div class="appointment-step">
         <div class="step-number">3</div>
         <h3>Confirm Details</h3>
@@ -143,7 +143,7 @@
           <p><strong>Date:</strong> <span id="displayDate">Not selected</span></p>
           <p><strong>Time:</strong> <span id="displayTime">Not selected</span></p>
         </div>
-        <button id="confirmAppointment" class="book-btn">Confirm Appointment</button>
+        <button id="confirmAppointment" class="book-btn"><a href="Loginweb/LoginPage.html"></a> Confirm Appointment</button>
         <p class="note">By confirming, you agree to our <a href="#">terms of service</a></p>
       </div>
 
@@ -151,7 +151,7 @@
         Download Receipt (PDF)
       </button>
 
-      <!-- Hidden receipt content -->
+      <!-- Hidden receipt content 
       <div id="appointmentReceipt" style="display: none;">
         <form id="appointmentForm">
         <h2>Appointment Receipt</h2>
@@ -167,7 +167,7 @@
     </div>
   </div>
 </section>
-
+-->
 <section class="announcements">
   <div class="container">
     <h2>Latest Announcements</h2>
