@@ -275,6 +275,28 @@ tr:hover {
   color: #721c24;
 }
 
+.btn-blue {
+  background-color: #007bff;
+  color: #fff;
+}
+.btn-blue:hover {
+  background-color: #0056b3;
+}
+.btn-green {
+  background-color: #28a745;
+  color: #fff;
+}
+.btn-green:hover {
+  background-color: #1e7e34;
+}
+.btn-orange {
+  background-color: #fd7e14;
+  color: #fff;
+}
+.btn-orange:hover {
+  background-color: #e8590c;
+}
+
 /* Search and Filter */
 .search-filter {
   display: flex;
@@ -469,7 +491,7 @@ font-size: 13px;
 
   <div class="search-filter">
     <div class="search-box">
-      <input type="text" placeholder="Search documents by reference number, claimant name...">
+      <input type="text" id="searchInput" placeholder="Search documents by reference number, claimant name...">
     </div>
     <div class="filter-box">
       <select>
@@ -491,18 +513,18 @@ font-size: 13px;
         </button>
       </div>
     </div>
-    <div id="printArea">
+    <div id="printAreaReady">
       <table>
         <thead>
           <tr>
-            <th>Ref. No.</th>
+            <th>Reference Number</th>
             <th>Document Type</th>
-            <th>Claimant Name</th>
             <th>Release Method</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
+        <tbody></tbody>
       </table>
     </div>
   </div>
@@ -512,19 +534,18 @@ font-size: 13px;
       <h3 class="section-title">Recently Released Documents</h3>
       <button class="btn btn-primary" id="exportExcelBtn">Export to Excel</button>
     </div>
-    <div id="printArea">
+    <div id="printAreaReleased">
       <table>
         <thead>
           <tr>
-            <th>Ref. No.</th>
+            <th>Reference Number</th>
             <th>Document Type</th>
-            <th>Claimant Name</th>
             <th>Release Method</th>
             <th>Status</th>
-            <th>Released By</th>
             <th>Date Released</th>
           </tr>
         </thead>
+        <tbody></tbody>
       </table>
     </div>
   </div>

@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])&& !isset($_SESSION['isAdmin'])) {
 
 $user_id = $_SESSION['user_id'];
 
-$sql_full = "SELECT document.reg_id, users.username, document.certif_type, document.status
+$sql_full = "SELECT document.reg_id, users.username, document.certif_type, document.status, document.created_at, document.updated_at
              FROM document
              INNER JOIN users ON document.user_id = users.id
              WHERE users.id = ?
@@ -37,6 +37,64 @@ $result_full = $stmt->get_result();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="Certificate.css">
+    <style>
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .status-received {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .status-processing {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+        .status-paid {
+            background-color: #f0fdf4;
+            color: #166534;
+        }
+        .status-signed {
+            background-color: #f5f3ff;
+            color: #5b21b6;
+        }
+        .status-ready_for_release {
+            background-color: #f0f9ff;
+            color: #0c4a6e;
+        }
+        .status-released {
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+        .status-rejected {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        .certificate-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .certificate-table th, .certificate-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .certificate-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        .certificate-table tr:hover {
+            background-color: #f9fafb;
+        }
+    </style>
 </head>
 
 <body>
@@ -46,6 +104,11 @@ $result_full = $stmt->get_result();
     <div class="logo-container">
       <img src="../resources/Logo.png" alt="Logo" class="logo">
     </div>
+    <div class="title-container">
+      <h1>CIVIL REGISTRY INFORMATION SYSTEM</h1>
+      <p class="tagline">Preserving Life's Milestones, One Record at a Time</p>
+    </div>
+  </div>
 
     <!-- Search Bar -->
     <div class="search-tab">
@@ -98,6 +161,8 @@ $result_full = $stmt->get_result();
 
 
 </header>
+
+
 
 <div class="title">
     <h1> <strong> Registration Portal for Vital Records </strong> 
@@ -961,21 +1026,45 @@ $result_full = $stmt->get_result();
                 </div>
 
                 <!-- Step 2 -->
-            <div class="form-step" data-step="1">
-                <label for="uploadID">Upload a valid ID:</label>
-                <input type="file" id="idImage" name="uploadID" accept="image/*,application/pdf" required>
-                <button type="button" id="prevBtn"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
-                <button type="button" id="nextStep2Btn">Next  <i class="fas fa-arrow-right ml-2"></i> </button> <!-- ✅ unique ID -->
-            </div>
+                <div class="form-step" data-step="1">
+                  <div class="upload-container">
+                    <label for="documentUpload" class="file-upload-label">
+                      Upload Supporting Documents (PDF, DOC, JPG, PNG):
+                    </label>
+                    <label for="documentUpload" class="upload-button">
+                      <i class="fas fa-cloud-upload-alt"></i> Choose Files
+                    </label>
+                    <input type="file" id="documentUpload" class="file-input"
+                           accept="application/pdf,.doc,.docx,image/*" multiple
+                           onchange="handleFileSelection(this)">
+
+                    <div class="file-preview-container" id="filePreviewContainer">
+                      <div class="file-preview-header">
+                        <span>Selected Files</span>
+                        <span id="totalSize">0 MB</span>
+                      </div>
+                      <div class="file-list" id="fileList">
+                        <div class="no-files">No files selected yet</div>
+                      </div>
+                    </div>
+
+                    <div class="file-requirements">
+                      <p><strong>Note:</strong> Total limit 100MB.</p>
+                    </div>
+                  </div>
+
+                  <button type="button" id="prevBtn"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
+                  <button type="button" id="nextStep2Btn">Next  <i class="fas fa-arrow-right ml-2"></i> </button> 
+                </div>
 
                 <!-- Step 3 -->
-            <div class="form-step" data-step="2">
-            <div id="reviewSummary" class="review-summary"></div>
-                <button type="button" id="downloadBtn">Download PDF <i class="fas fa-download"></i></button>
-                <button type="button" id="verificationPrevBtn"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
-                <button type="button" id="goToPaymentBtn">Proceed to Payment <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-            </div>
+                <div class="form-step" data-step="2">
+                <div id="reviewSummary" class="review-summary"></div>
+                    <button type="button" id="downloadBtn">Download PDF <i class="fas fa-download"></i></button>
+                    <button type="button" id="verificationPrevBtn"><i class="fas fa-arrow-left mr-2"></i> Previous</button>
+                    <button type="button" id="goToPaymentBtn">Proceed to Payment <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
 
                 <!-- STEP 4: Updated Payment UI -->
                 <div class="form-step" data-step="3">
@@ -1157,25 +1246,32 @@ $result_full = $stmt->get_result();
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID Number</th>
-                    <th>UserName</th>
+                    <th>Reference Number</th>
                     <th>Certificate Type</th>
                     <th>Status</th>
+                    <th>Date Requested</th>
+                    <th>Last Updated</th>
                 </tr>
             </thead>
             <tbody id="registrationTableBody">
                 <?php
                 if ($result_full && $result_full->num_rows > 0) {
                     while ($row = $result_full->fetch_assoc()) {
+                        $status = strtolower($row['status'] ?? 'pending');
+                        if ($status === 'paid' || $status === 'unpaid') {
+                            $status = 'processing';
+                        }
+                        $status_class = strtolower($status);
                         echo "<tr>
-                <td>" . htmlspecialchars($row['reg_id']) . "</td>
-                <td>" . htmlspecialchars($row['username']) . "</td>
-                <td>" . htmlspecialchars($row['certif_type']) . "</td>
-                <td>" . htmlspecialchars($row['status']) . "</td>
-                </tr>";
+                            <td>" . htmlspecialchars($row['reg_id']) . "</td>
+                            <td>" . htmlspecialchars(ucfirst($row['certif_type'])) . "</td>
+                            <td><span class='status-badge status-{$status_class}'>" . ucfirst(str_replace('_', ' ', $status)) . "</span></td>
+                            <td>" . date('M d, Y', strtotime($row['created_at'])) . "</td>
+                            <td>" . ($row['updated_at'] ? date('M d, Y', strtotime($row['updated_at'])) : 'N/A') . "</td>
+                        </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='4'>No registrations found.</td></tr>";
+                    echo "<tr><td colspan='5' class='text-center py-4 text-gray-500'>No certificate applications found.</td></tr>";
                 }
                 ?>
             </tbody>

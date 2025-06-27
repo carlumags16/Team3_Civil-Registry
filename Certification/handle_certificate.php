@@ -357,7 +357,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $newRegId = 'REG-' . str_pad($nextNum, 5, '0', STR_PAD_LEFT);
 
-    $doc_sql = "INSERT INTO document (reg_id, user_id, cert_id, certif_type, status) VALUES (?, ?, ?, ?, 'PENDING')";
+    $transaction_number = $_POST['transaction_number'] ?? null;
+    $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0.00;
+
+    $doc_sql = "INSERT INTO document (reg_id, user_id, cert_id, certif_type, status, transaction_number, amount) VALUES (?, ?, ?, ?, 'PENDING', ?, ?)";
     $document_stmt = $conn->prepare($doc_sql);
 
     if (!$document_stmt) {
@@ -366,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $document_stmt->bind_param("siss", $newRegId, $user_id, $cert_id, $certificateType);
+    $document_stmt->bind_param("sisssd", $newRegId, $user_id, $cert_id, $certificateType, $transaction_number, $amount);
 
    if (!$document_stmt->execute()) {
     http_response_code(500);

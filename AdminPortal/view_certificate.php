@@ -35,109 +35,184 @@ if ($table && $id) {
     <style>
         body, html {
             height: 100%;
+            font-family: 'Times New Roman', serif;
         }
         .certificate-container {
-            max-width: 800px;
+            max-width: 8.5in;
             margin: 0 auto;
+            position: relative;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .watermark {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 8rem;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+            top: 30%;
+            transform: rotate(-30deg);
+            pointer-events: none;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+        .header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 2px solid #000;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .certificate-body {
+            padding: 2rem;
+            position: relative;
         }
         .field-group {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 1rem;
-            padding: 0.75rem 0;
+            display: flex;
+            margin-bottom: 1rem;
             border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
         }
         .field-label {
-            font-weight: 500;
-            color: #6b7280;
-            text-transform: capitalize;
+            font-weight: bold;
+            min-width: 200px;
+            padding-right: 1rem;
         }
         .field-value {
-            color: #1f2937;
+            flex: 1;
         }
-        @media (max-width: 640px) {
-            .field-group {
-                grid-template-columns: 1fr;
-            }
+        .signature-section {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
         }
-    </style>
+        .signature {
+            text-align: center;
+            width: 200px;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            margin: 40px 0 5px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
 </head>
-<body class="bg-gray-100 h-full">
-    <div class="min-h-full flex items-center justify-center p-4">
-        <div class="certificate-container w-full">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <!-- Header -->
-                <div class="bg-blue-600 text-white p-6">
-                    <div class="flex justify-between items-center">
-                        <h1 class="text-2xl font-bold">
-                            <i class="fas fa-file-certificate mr-2"></i>
-                            Certificate Details
-                        </h1>
-                        <a href="AdminDashboard.html" class="text-white hover:text-blue-200 flex items-center">
-                            <i class="fas fa-arrow-left mr-1"></i> Back
+<body class="bg-gray-100 h-full p-4">
+    <div class="certificate-container">
+        <div class="watermark">
+            <i class="fas fa-certificate"></i>
+        </div>
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <h1>REPUBLIC OF THE PHILIPPINES</h1>
+                <p>MUNICIPAL CIVIL REGISTRY</p>
+                <p>MUNICIPALITY OF TAYTAY</p>
+                <p>PROVINCE OF PALAWAN</p>
+                <h2 class="mt-4 font-bold text-xl">CERTIFICATE OF LIVE BIRTH</h2>
+            </div>
+            
+            <!-- Certificate Content -->
+            <div class="certificate-body">
+                <?php if ($certificate): ?>
+                    <div class="mb-8">
+                        <div class="field-group">
+                            <div class="field-label">CHILD'S NAME:</div>
+                            <div class="field-value"><?= htmlspecialchars($certificate['child_first_name'] ?? '') ?> 
+                            <?= htmlspecialchars($certificate['child_middle_name'] ?? '') ?> 
+                            <?= htmlspecialchars($certificate['child_last_name'] ?? '') ?></div>
+                        </div>
+                        
+                        <div class="field-group">
+                            <div class="field-label">DATE OF BIRTH:</div>
+                            <div class="field-value">
+                                <?= isset($certificate['date_of_birth']) ? date('F j, Y', strtotime($certificate['date_of_birth'])) : '' ?>
+                            </div>
+                        </div>
+                        
+                        <div class="field-group">
+                            <div class="field-label">PLACE OF BIRTH:</div>
+                            <div class="field-value"><?= htmlspecialchars($certificate['place_of_birth'] ?? '') ?></div>
+                        </div>
+                        
+                        <div class="field-group">
+                            <div class="field-label">SEX:</div>
+                            <div class="field-value"><?= htmlspecialchars($certificate['sex'] ?? '') ?></div>
+                        </div>
+                        
+                        <div class="field-group">
+                            <div class="field-label">FATHER'S NAME:</div>
+                            <div class="field-value">
+                                <?= htmlspecialchars($certificate['father_first_name'] ?? '') ?> 
+                                <?= htmlspecialchars($certificate['father_middle_name'] ?? '') ?> 
+                                <?= htmlspecialchars($certificate['father_last_name'] ?? '') ?>
+                            </div>
+                        </div>
+                        
+                        <div class="field-group">
+                            <div class="field-label">MOTHER'S NAME:</div>
+                            <div class="field-value">
+                                <?= htmlspecialchars($certificate['mother_first_name'] ?? '') ?> 
+                                <?= htmlspecialchars($certificate['mother_middle_name'] ?? '') ?> 
+                                <?= htmlspecialchars($certificate['mother_last_name'] ?? '') ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Signature Section -->
+                    <div class="signature-section">
+                        <div class="signature">
+                            <div class="signature-line"></div>
+                            <p>Signature of Applicant</p>
+                        </div>
+                        <div class="signature">
+                            <div class="signature-line"></div>
+                            <p>Municipal Civil Registrar</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+                            <i class="fas fa-print mr-2"></i>Print
+                        </button>
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </button>
+                        <a href="AdminDashboard.html" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 inline-flex items-center">
+                            <i class="fas fa-times mr-2"></i>Close
                         </a>
                     </div>
-                    <div class="mt-2 flex items-center text-blue-100">
-                        <span class="bg-blue-500 px-2 py-1 rounded text-xs font-medium">
-                            <?= strtoupper(htmlspecialchars($type)) ?> CERTIFICATE
-                        </span>
-                        <?php if (isset($certificate['status'])): ?>
-                            <span class="ml-3 px-2 py-1 rounded text-xs font-medium 
-                                      <?= $certificate['status'] === 'Approved' ? 'bg-green-100 text-green-800' : 
-                                         ($certificate['status'] === 'Rejected' ? 'bg-red-100 text-red-800' : 
-                                         'bg-yellow-100 text-yellow-800') ?>">
-                                <?= htmlspecialchars($certificate['status']) ?>
-                            </span>
-                        <?php endif; ?>
+                    
+                <?php else: ?>
+                    <div class="text-center py-12">
+                        <i class="fas fa-exclamation-circle text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600">Certificate not found or no longer available.</p>
+                        <a href="AdminDashboard.html" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Return to Dashboard
+                        </a>
                     </div>
-                </div>
-                
-                <!-- Certificate Content -->
-                <div class="p-6">
-                    <?php if ($certificate): ?>
-                        <div class="space-y-1">
-                            <?php 
-                            // Skip these fields from display
-                            $skipFields = ['id', 'user_id', 'status', 'created_at'];
-                            
-                            foreach ($certificate as $key => $value): 
-                                if (in_array($key, $skipFields) || $value === null || $value === '') continue;
-                                
-                                // Format the key for display
-                                $displayKey = ucwords(str_replace('_', ' ', $key));
-                                $displayValue = is_string($value) ? htmlspecialchars($value) : $value;
-                                ?>
-                                <div class="field-group">
-                                    <div class="field-label"><?= $displayKey ?></div>
-                                    <div class="field-value"><?= $displayValue ?></div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        
-                        <!-- Timestamp -->
-                        <?php if (isset($certificate['created_at'])): ?>
-                            <div class="mt-6 pt-4 border-t border-gray-200 text-sm text-gray-500">
-                                <p>Created on: <?= date('F j, Y, g:i a', strtotime($certificate['created_at'])) ?></p>
-                            </div>
-                        <?php endif; ?>
-                        
-                    <?php else: ?>
-                        <div class="text-center py-12">
-                            <i class="fas fa-exclamation-circle text-4xl text-gray-400 mb-4"></i>
-                            <p class="text-gray-600">Certificate not found or no longer available.</p>
-                            <a href="AdminDashboard.html" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                Return to Dashboard
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                
-                <!-- Footer -->
-                <div class="bg-gray-50 px-6 py-4 flex justify-end">
-                    <a href="AdminDashboard.html" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-                        Close
-                    </a>
-                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
             </div>
         </div>
     </div>

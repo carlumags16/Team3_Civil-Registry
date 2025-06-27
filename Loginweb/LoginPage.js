@@ -45,9 +45,23 @@ document.getElementById('signupForm').addEventListener('submit', function (e) {
 });
 
 function LogIn() {
+    console.log('LogIn function called');
     const form = document.getElementById('loginForm');
-    const email = form.querySelector('input[type=email]').value.trim();
-    const password = form.querySelector('input[type=password]').value.trim();
+    const emailInput = form.querySelector('input[type=email]');
+    const passwordInput = form.querySelector('input[type=password]');
+
+    if (!emailInput || !passwordInput) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Form Error',
+            text: 'Login form is missing required fields.',
+            confirmButtonText: 'OK'
+        });
+        return false;
+    }
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
     if (!email || !password) {
         Swal.fire({

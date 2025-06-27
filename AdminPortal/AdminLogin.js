@@ -33,16 +33,42 @@ loginForm.addEventListener('submit', function (e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            // ✅ Store session and role info
+            // ✅ Store session and role info in both localStorage and sessionStorage
             sessionStorage.setItem("isAdmin", "true");
+            sessionStorage.setItem("adminUsername", data.username);
+            sessionStorage.setItem("adminRole", data.role);
+            
+            // Also store in localStorage for persistence
+            localStorage.setItem("isAdmin", "true");
             localStorage.setItem("adminUsername", data.username);
             localStorage.setItem("adminRole", data.role);
+            
+            console.log('Login successful. Role:', data.role);
 
             successMessage.style.display = 'block';
             successMessage.textContent = data.message;
 
+            // Redirect based on role
+            let redirectUrl = 'AdminDashboard.html'; // Default dashboard
+            
+            // Map roles to their respective dashboards
+            const roleDashboards = {
+                'Releasing Officer': '../Roles/ReleasingAdmin.html',
+                'Verifying Officer': '../Roles/VerifierAdmin.html',
+                'Cashier': '../Roles/CashierAdmin.html',
+                'Document Signatory Officer': '../Roles/SignatoryAdmin.html',
+                'Report Officer': '../Roles/ReportAdmin.html',
+                'Help Desk Officer': '../Roles/HelpAdmin.html',
+                'Super Admin': 'AdminDashboard.html' // Keep Super Admin on the main dashboard
+            };
+
+            // If role has a specific dashboard, use it
+            if (roleDashboards[data.role]) {
+                redirectUrl = roleDashboards[data.role];
+            }
+
             setTimeout(() => {
-                window.location.href = 'AdminDashboard.html';
+                window.location.href = redirectUrl;
             }, 1000);
         } else {
             throw new Error(data.message);

@@ -202,8 +202,12 @@ function resetFormAndStepper() {
 
 function closeForm() {
     const popup = document.getElementById('popupForm');
-    if (popup) popup.style.display = 'none';
-    certificateForm?.reset();
+    if (popup) {
+        popup.style.display = 'none';
+        popup.style.visibility = 'hidden';
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    }
+    if (form) form.reset();
     resetFormAndStepper();
 }
 
@@ -235,14 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+// Form and UI elements
 const form = document.getElementById('certificateForm');
 const steps = document.querySelectorAll('.form-step');
-
 const nextBtn = document.getElementById('nextBtn');
 const verificationPrevBtn = document.getElementById('verificationPrevBtn');
 const prevBtn = document.getElementById('prevBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-
 let currentStep = 0;
 
 // Map certificate type to its fields container id
@@ -353,6 +356,59 @@ for (const input of inputs) {
   return true;
 }
 
+// --- Modern File Upload UI Logic for Step 2 ---
+document.addEventListener('DOMContentLoaded', function () {
+    const selectFileBtn = document.getElementById('selectFileBtn');
+    const idImageInput = document.getElementById('idImage');
+    const filePreview = document.getElementById('filePreview');
+
+    if (selectFileBtn && idImageInput && filePreview) {
+        selectFileBtn.addEventListener('click', function () {
+            idImageInput.click();
+        });
+
+        idImageInput.addEventListener('change', function () {
+            filePreview.innerHTML = '';
+            if (idImageInput.files && idImageInput.files.length > 0) {
+                const file = idImageInput.files[0];
+                const fileType = file.type;
+                const fileName = file.name;
+                const fileSize = (file.size / 1024).toFixed(1) + ' KB';
+
+                let previewContent = '';
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewContent = `<img src="${e.target.result}" alt="Preview" style="max-width: 180px; max-height: 180px; display: block; margin-bottom: 8px; border-radius: 8px; border: 1px solid #ccc;" />`;
+                        previewContent += `<div><strong>${fileName}</strong> (${fileSize})</div>`;
+                        previewContent += `<button type="button" id="removeFileBtn">Remove</button>`;
+                        filePreview.innerHTML = previewContent;
+                        document.getElementById('removeFileBtn').onclick = function () {
+                            idImageInput.value = '';
+                            filePreview.innerHTML = '';
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                } else if (fileType === 'application/pdf') {
+                    previewContent = `<i class="fas fa-file-pdf fa-3x" style="color:#d32f2f;"></i><br>`;
+                    previewContent += `<div><strong>${fileName}</strong> (${fileSize})</div>`;
+                    previewContent += `<button type="button" id="removeFileBtn">Remove</button>`;
+                    filePreview.innerHTML = previewContent;
+                    document.getElementById('removeFileBtn').onclick = function () {
+                        idImageInput.value = '';
+                        filePreview.innerHTML = '';
+                    };
+                } else {
+                    previewContent = `<span style="color: #d32f2f;">Unsupported file type.</span>`;
+                    filePreview.innerHTML = previewContent;
+                    idImageInput.value = '';
+                }
+            }
+        });
+    }
+});
+
+// Update validateStep2 to check the new UI
 function validateStep2() {
   const idImageInput = document.getElementById('idImage');
   if (!idImageInput || !idImageInput.files || idImageInput.files.length === 0) {
@@ -364,6 +420,7 @@ function validateStep2() {
     });
     return false;
   }
+  // Optionally, add file type/size validation here
   return true;
 }
 
@@ -477,82 +534,83 @@ downloadBtn.addEventListener('click', () => {
 
 let registrationCount = 0;
 
-form.addEventListener('submitBtn', async e => {
-    e.preventDefault();  // Prevent default form submission
+// Handle form submission
+if (form) {
+    form.addEventListener('submit', async e => {
+        e.preventDefault();  // Prevent default form submission
 
-    console.log("Form submission intercepted.");
+        console.log("Form submission intercepted.");
 
-    registrationCount++;
+        registrationCount++;
 
-    const certType = document.getElementById('certificateType').value;
-    const sectionId = sectionMap[certType];
-    const section = document.getElementById(sectionId);
-    if (!section) return;
+        const certType = document.getElementById('certificateType').value;
+        const sectionId = sectionMap[certType];
+        const section = document.getElementById(sectionId);
+        if (!section) return;
 
-    const firstName = section.querySelector('input[placeholder="First Name"]')?.value.trim() || '';
-    const lastName = section.querySelector('input[placeholder="Last Name"]')?.value.trim() || '';
-    const middleInitial = section.querySelector('input[placeholder="Middle Initial"]')?.value.trim() || '';
-    const suffix = section.querySelector('input#suffix')?.value.trim() || '';
+        const firstName = section.querySelector('input[placeholder="First Name"]')?.value.trim() || '';
+        const lastName = section.querySelector('input[placeholder="Last Name"]')?.value.trim() || '';
+        const middleInitial = section.querySelector('input[placeholder="Middle Initial"]')?.value.trim() || '';
+        const suffix = section.querySelector('input#suffix')?.value.trim() || '';
 
-    const fullName = [firstName, middleInitial && middleInitial + '.', lastName, suffix].filter(Boolean).join(' ').trim();
+        const fullName = [firstName, middleInitial && middleInitial + '.', lastName, suffix].filter(Boolean).join(' ').trim();
 
-    const formData = new FormData(form);
+        const formData = new FormData(form);
+        // Add the transaction_number (REF...) from the payment summary
+        const transactionNumber = document.getElementById('referenceId')?.textContent || '';
+        formData.append('transaction_number', transactionNumber);
+        // Add the calculated amount (final amount)
+        const amount = document.getElementById('finalAmount')?.textContent || '';
+        formData.append('amount', amount);
 
-    try {
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: formData
-        });
-
-        console.log('Response status:', response.status);
-        const text = await response.text();
-        console.log('Response text:', text);
-
-        // Accept any 2xx status as success
-        if (response.status >= 200 && response.status < 300) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Registration Submitted Successfully!',
-                text: 'Your payment and registration have been recorded.',
-                confirmButtonColor: '#3b82f6'
-            }).then(() => {
-                closeForm();
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData
             });
-        } else {
-            throw new Error('Submission failed with status ' + response.status);
+
+            console.log('Response status:', response.status);
+            const text = await response.text();
+            console.log('Response text:', text);
+
+            // Accept any 2xx status as success
+            if (response.status >= 200 && response.status < 300) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Submitted Successfully!',
+                    text: 'Your payment and registration have been recorded.',
+                    confirmButtonColor: '#3b82f6'
+                }).then(() => {
+                    closeForm();
+                });
+            } else {
+                throw new Error('Submission failed with status ' + response.status);
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while submitting the form. Please try again.',
+                confirmButtonColor: '#ef4444'
+            });
         }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Submission Failed',
-            text: 'Please try again later.',
-            confirmButtonColor: '#ef4444'
-        });
-    }
-});
+    });
+}
 
-
-//First AAAAAAAAAAARRGGHHH
+// Initialize the form
 showStep(currentStep);
 
-
-async function downloadPDF() {
-    const certType = document.getElementById('certificateType').value;
-    const sectionMap = {
-        'Birth Certificate': 'birthFields',
-        'Marriage Certificate': 'marriageFields',
-        'Death Certificate': 'deathFields',
-        'Cenomar Certificate': 'cenomarFields',
-        'Cenodeath Certificate': 'cenodeathFields'
-    };
+// PDF generation code
+function generatePDF(certType) {
     const sectionId = sectionMap[certType];
     const section = document.getElementById(sectionId);
 
-    if (!section) return;
+    if (!section) return null;
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    return doc;
     doc.setFontSize(14);
     doc.text('Certificate Registration Summary', 10, 10);
 
@@ -675,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
     document.querySelectorAll('[id$="Details"]').forEach(el => el.classList.add('hidden'));
     document.querySelector(`#${method}Details`)?.classList.remove('hidden');
-    document.querySelector(`[onclick="selectPayment('${method}')']`)?.classList.add('selected');
+    document.querySelector(`[onclick="selectPayment('${method}')"]`)?.classList.add('selected');
   }
 
   window.sendOTP = function(method) {
@@ -1021,3 +1079,151 @@ document.addEventListener('DOMContentLoaded', function () {
   window.openWalkInForm = openWalkInForm;
   window.closeWalkInForm = closeWalkInForm;
 });
+
+let uploadedFiles = [];
+
+function handleFileSelection(input) {
+  const MAX_SIZE = 500 * 1024 * 1024; // 500MB total limit
+  const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB per file
+
+  if (input.files && input.files.length > 0) {
+    for (let i = 0; i < input.files.length; i++) {
+      const file = input.files[i];
+
+      if (file.size > MAX_FILE_SIZE) {
+        Swal.fire({
+          icon: 'error',
+          title: 'File Too Large',
+          text: `${file.name} is ${formatFileSize(file.size)} (max 100MB per file)`,
+          confirmButtonColor: '#3498db'
+        });
+        continue;
+      }
+
+      const fileExists = uploadedFiles.some(
+        existingFile => existingFile.name === file.name && existingFile.size === file.size
+      );
+
+      if (!fileExists) uploadedFiles.push(file);
+    }
+  }
+
+  updateFilePreview();
+  updateInputFiles();
+}
+
+function updateFilePreview() {
+  const fileList = document.getElementById('fileList');
+  const totalSizeElement = document.getElementById('totalSize');
+  let totalSize = 0;
+
+  fileList.innerHTML = '';
+
+  if (uploadedFiles.length === 0) {
+    fileList.innerHTML = '<div class="no-files">No files selected yet</div>';
+    totalSizeElement.textContent = '0 MB';
+    return;
+  }
+
+  uploadedFiles.forEach((file, index) => {
+    totalSize += file.size;
+    const fileItem = document.createElement('div');
+    fileItem.className = 'file-item';
+
+    let iconClass = 'fa-file-alt';
+    if (file.type.startsWith('image/')) iconClass = 'fa-file-image';
+    else if (file.type === 'application/pdf') iconClass = 'fa-file-pdf';
+    else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+      iconClass = 'fa-file-word';
+    }
+
+    fileItem.innerHTML = `
+      <i class="fas ${iconClass} file-icon"></i>
+      <div class="file-info">
+        <div class="file-name">${file.name}</div>
+        <div class="file-size">${formatFileSize(file.size)}</div>
+      </div>
+      <i class="fas fa-times remove-file" data-index="${index}"></i>
+    `;
+
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const previewContent = document.createElement('div');
+        previewContent.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+        fileItem.appendChild(previewContent);
+      };
+      reader.readAsDataURL(file);
+    } else if (file.type === 'application/pdf') {
+      const previewContent = document.createElement('div');
+      previewContent.className = 'pdf-preview';
+      previewContent.innerHTML = `
+        <i class="fas fa-file-pdf pdf-preview-icon"></i>
+        <div class="pdf-preview-text">PDF Document</div>
+      `;
+      fileItem.appendChild(previewContent);
+    }
+
+    fileList.appendChild(fileItem);
+  });
+
+  totalSizeElement.textContent = formatFileSize(totalSize);
+
+  document.querySelectorAll('.remove-file').forEach(button => {
+    button.addEventListener('click', function() {
+      const index = parseInt(this.getAttribute('data-index'));
+      removeFile(index);
+    });
+  });
+}
+
+function removeFile(index) {
+  uploadedFiles.splice(index, 1);
+  updateFilePreview();
+  updateInputFiles();
+}
+
+function updateInputFiles() {
+  const input = document.getElementById('documentUpload');
+  const dataTransfer = new DataTransfer();
+  uploadedFiles.forEach(file => dataTransfer.items.add(file));
+  input.files = dataTransfer.files;
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' bytes';
+  else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  else return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+document.getElementById('prevBtn').addEventListener('click', function() {
+  console.log('Previous button clicked');
+});
+
+document.getElementById('nextStep2Btn').addEventListener('click', function() {
+  if (uploadedFiles.length === 0) {
+    Swal.fire({
+      icon: 'error',
+      title: 'No Files Selected',
+      text: 'Please upload at least one file',
+      confirmButtonColor: '#3498db'
+    });
+    return;
+  }
+  console.log('Next button clicked with files:', uploadedFiles);
+});
+
+function validateStep2() {
+  const idImageInput = document.getElementById('documentUpload');
+  if (!idImageInput || !idImageInput.files || idImageInput.files.length === 0) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Validation Error',
+      text: 'Please upload your ID or document for verification.',
+      confirmButtonColor: '#3b82f6'
+    });
+    return false;
+  }
+  // Optionally, add file type/size validation here
+  return true;
+}

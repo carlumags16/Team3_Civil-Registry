@@ -262,6 +262,7 @@
             <button class="tab-btn" data-tab="death">Death Certificate</button>
             <button class="tab-btn" data-tab="cenomar">CENOMAR</button>
             <button class="tab-btn" data-tab="cenodeath">CENODEATH</button>
+            <button class="tab-btn" data-tab="correction">Document Correction | R.A. 9048</button>
         </div>
         
         <div class="requirements-content">
@@ -333,6 +334,114 @@
                 </ul>
                 <div class="note">
                     <p><strong>Note:</strong> CENODEATH (Certificate of No Death Record) is often required for legal or inheritance purposes.</p>
+                </div>
+            </div>
+
+            <!-- Document Correction | R.A. 9048 -->
+            <div class="tab-content" id="correction-requirements">
+                <h3>Document Correction | R.A. 9048 Requirements</h3>
+                <div class="certificate-tabs">
+                    <button class="certificate-tab yellow-bg active" onclick="openCertificate('birth')">Birth Certificate</button>
+                    <button class="certificate-tab red-bg" onclick="openCertificate('marriage')">Marriage Certificate</button>
+                    <button class="certificate-tab brown-bg" onclick="openCertificate('death')">Death Certificate</button>
+                    <button class="certificate-tab blue-bg" onclick="openCertificate('cenodeath')">CENODEATH</button>
+                    <button class="certificate-tab orange-bg" onclick="openCertificate('cenomar')">CENOMAR</button>
+                </div>
+                <!-- Birth Certificate Correction -->
+                <div id="birth" class="correction-type" style="display: block;">
+                    <h4>Birth Certificate Correction</h4>
+                    <p><strong>Applicable Law:</strong> Republic Act No. 9048 (for clerical errors) and RA 10172 (for correction of gender, birth month/day)</p>
+                    <p><strong>Common Required Documents:</strong></p>
+                    <ul>
+                        <li>Petition for Correction (notarized)</li>
+                        <li>Certified true copy of the Birth Certificate with error (from PSA/LCR/CRIS)</li>
+                        <li>Valid government-issued ID of the petitioner</li>
+                        <li>Affidavit of Discrepancy (if applicable)</li>
+                        <li>Supporting documents to prove correct information:
+                            <ul>
+                                <li>School records (Form 137, diploma)</li>
+                                <li>Baptismal certificate</li>
+                                <li>Medical records</li>
+                                <li>Government issued ID's</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Marriage Certificate Correction -->
+                <div id="marriage" class="correction-type" style="display: none;">
+                    <h4>Marriage Certificate Correction</h4>
+                    <p><strong>Applicable Law:</strong> RA 9048 and RA 10172</p>
+                    <p><strong>Common Required Documents:</strong></p>
+                    <ul>
+                        <li>Petition for Correction (notarized)</li>
+                        <li>Certified true copy of the Marriage Certificate with error</li>
+                        <li>Valid IDs of both spouses</li>
+                        <li>Affidavit of Discrepancy</li>
+                        <li>Supporting documents:
+                            <ul>
+                                <li>Church marriage contract (if available)</li>
+                                <li>Birth certificates of spouses</li>
+                                <li>Joint affidavit of two disinterested persons</li>
+                                <li>Other government-issued documents (passport, SSS, etc.)</li>
+                            </ul>
+                        </li>
+                        <li>Consent or appearance of both parties (if applicable)</li>
+                    </ul>
+                    <div class="note">
+                        <p><strong>Note:</strong> If the correction involves civil status, nationality, or marriage validity, it may require court proceedings.</p>
+                    </div>
+                </div>
+                <!-- Death Certificate Correction -->
+                <div id="death" class="correction-type" style="display: none;">
+                    <h4>Death Certificate Correction</h4>
+                    <p><strong>Applicable Law:</strong> RA 9048 and RA 10172</p>
+                    <p><strong>Common Required Documents:</strong></p>
+                    <ul>
+                        <li>Petition for Correction (filed by nearest kin)</li>
+                        <li>Certified true copy of the Death Certificate</li>
+                        <li>Valid ID of petitioner</li>
+                        <li>Medical Certificate of Death (if available)</li>
+                        <li>Supporting documents:
+                            <ul>
+                                <li>Birth certificate of deceased</li>
+                                <li>Marriage certificate (if applicable)</li>
+                                <li>Any ID or government records of deceased</li>
+                                <li>Burial/cremation permit</li>
+                            </ul>
+                        </li>
+                        <li>Affidavit of Discrepancy or affidavits from two disinterested persons</li>
+                        <li>Proof of relationship (if needed)</li>
+                    </ul>
+                </div>
+                <!-- CENODEATH -->
+                <div id="cenodeath" class="correction-type" style="display: none;">
+                    <h4>CENODEATH (Certificate of No Death Record)</h4>
+                    <p>Issued to certify that a person has no recorded death in the PSA.</p>
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Valid ID of requesting party</li>
+                        <li>Authorization letter (if not the owner or direct relative)</li>
+                        <li>Birth certificate of the person (optional but useful)</li>
+                        <li>Purpose of request (e.g., benefit claim, verification)</li>
+                    </ul>
+                    <div class="note">
+                        <p><strong>Note:</strong> If there's a wrong death record, it must be corrected first in the Death Certificate before applying for CENODEATH.</p>
+                    </div>
+                </div>
+                <!-- CENOMAR -->
+                <div id="cenomar" class="correction-type" style="display: none;">
+                    <h4>CENOMAR (Certificate of No Marriage Record)</h4>
+                    <p>Issued by PSA to show that a person has no record of marriage.</p>
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Valid ID of requesting party</li>
+                        <li>Authorization letter with ID (if requesting for someone else)</li>
+                        <li>Birth certificate (optional but helpful)</li>
+                        <li>Purpose of request (e.g., marriage, travel, legal use)</li>
+                    </ul>
+                    <div class="note">
+                        <p><strong>Note:</strong> Corrections cannot be made to CENOMAR itself. If there's an error (like a marriage record that shouldn't exist), the marriage record must be corrected or nullified first.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -529,5 +638,19 @@
 </button>
 
     <script src="style.js"></script>
+
+    <!-- Tawk.to Chatbot Script -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/685823e3ae3e27190a9ea10c/1iuc4oco1';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+
 </body>
 </html>

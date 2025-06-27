@@ -24,14 +24,9 @@ document.querySelectorAll('.menu-item').forEach(item => {
   }
 });
 
-});
-
-function logout() {
-  sessionStorage.clear();
-  window.location.href = '../AdminPortal/AdminLogin.html';
-}
-
-  document.getElementById("exportBtn").addEventListener("click", function () {
+const exportBtn = document.getElementById("exportBtn");
+if (exportBtn) {
+  exportBtn.addEventListener("click", function () {
     const content = document.getElementById("printArea").innerHTML;
     const printWindow = window.open("", "", "height=800,width=1000");
 
@@ -46,11 +41,22 @@ function logout() {
     printWindow.print();
     printWindow.close();
   });
+}
 
-  document.getElementById('exportExcelBtn').addEventListener('click', function () {
-  var table = document.querySelector('table'); 
-  var workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
-  XLSX.writeFile(workbook, 'Transactions.xlsx');
+const exportExcelBtn = document.getElementById('exportExcelBtn');
+if (exportExcelBtn) {
+  exportExcelBtn.addEventListener('click', function () {
+    var table = document.querySelector('table'); 
+    var workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+    XLSX.writeFile(workbook, 'Transactions.xlsx');
+  });
+}
+
 });
+
+function logout() {
+  sessionStorage.clear();
+  window.location.href = '../AdminPortal/AdminLogin.html';
+}
 
 

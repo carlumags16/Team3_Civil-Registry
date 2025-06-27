@@ -1,0 +1,290 @@
+<?php
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Credentials: true');
+
+// Start session and check admin status
+session_start();
+
+if (!isset($conn) || !($conn instanceof PDO)) {
+    $error = 'Database connection failed: ' . (isset($conn) ? 'Invalid connection object' : 'Connection not established');
+    error_log($error);
+    sendResponse([
+        'success' => false,
+        'message' => 'Database connection failed',
+        'error' => $error,
+        'debug' => [
+            'connection' => isset($conn) ? get_class($conn) : 'not set',
+            'error_info' => $conn->errorInfo() ?? 'no error info'
+        ]
+    ], 500);
+}
+
+// Check if user is logged in and has admin role
+if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] !== true) {
+    error_log('Unauthorized access attempt - isAdmin: ' . ($_SESSION['isAdmin'] ?? 'not set'));
+    sendResponse([
+        'success' => false, 
+        'message' => 'Unauthorized access. Please log in.',
+        'session' => [
+            'is_set' => isset($_SESSION),
+            'is_admin' => $_SESSION['isAdmin'] ?? 'not set',
+            'admin_role' => $_SESSION['adminRole'] ?? 'not set'
+        ]
+    ], 403);
+}
+
+// Get admin role from session
+$adminRole = $_SESSION['adminRole'] ?? '';
+
+// Define certificate statuses for each role
+$roleStatuses = [
+    'Receiving Clerk' => ['PENDING'],
+    'Verifying Officer' => ['RECEIVED'],
+    'Cashier' => ['PROCESSING'],
+    'Document Signatory Officer' => ['PAID'],
+    'Releasing Officer' => ['SIGNED', 'READY_FOR_RELEASE'],
+    'Super Admin' => ['PENDING', 'RECEIVED', 'PROCESSING', 'REJECTED', 'PAID', 'SIGNED', 'READY_FOR_RELEASE', 'RELEASED']
+];
+
+// Get the statuses this role should see
+$statuses = $roleStatuses[$adminRole] ?? [];
+
+// If no statuses defined for role and not Super Admin
+if (empty($statuses) && $adminRole !== 'Super Admin') {
+    echo json_encode([
+        'success' => false,
+        'message' => 'No certificate statuses defined for your role: ' . $adminRole
+    ]);
+    exit;
+}
+
+try {
+    $response = [
+        'success' => true,
+        'data' => [
+            'certificates' => [],
+            'counts' => [
+                'pending' => 0,
+                'received' => 0,
+                'processing' => 0,
+                'rejected' => 0,
+                'signed' => 0,
+                'ready_for_release' => 0,
+                'released' => 0
+            ]
+        ]
+    ];
+
+    // Certificate types and their corresponding tables
+    $certTypes = [
+        'birth' => 'birth_certi',
+        'death' => 'death_certi',
+        'marriage' => 'marriage_certi',
+        'cenomar' => 'cenomar_certi',
+        'cenodeath' => 'cenodeath_certi'
+    ];
+
+        // Process each certificate type
+    foreach ($certTypes as $type => $table) {
+        try {
+            error_log("Processing certificate type: $type ($table)");
+            
+            // Base query to get certificates with proper field mapping for each type
+            $sql = "SELECT 
+                        id,
+                        COALESCE(reference_number, '') as reference_number,
+                        CASE 
+                            WHEN '$table' = 'birth_certi' THEN TRIM(CONCAT(COALESCE(child_firstname, ''), ' ', COALESCE(child_lastname, '')))
+                            WHEN '$table' = 'death_certi' THEN TRIM(CONCAT(COALESCE(dead_firstname, ''), ' ', COALESCE(dead_lastname, '')))
+                            WHEN '$table' = 'marriage_certi' THEN TRIM(CONCAT(COALESCE(groom_firstname, ''), ' & ', COALESCE(bride_firstname, '')))
+                            WHEN '$table' = 'cenomar_certi' THEN TRIM(CONCAT(COALESCE(child_firstname, ''), ' ', COALESCE(child_lastname, '')))
+                            WHEN '$table' = 'cenodeath_certi' THEN TRIM(CONCAT(COALESCE(deceased_firstname, ''), ' ', COALESCE(deceased_lastname, '')))
+                            ELSE 'Unknown Name'
+                        END as full_name,
+                        '$type' as cert_type,
+                        COALESCE(status, 'PENDING') as status,
+                        DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as created_at,
+                        DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') as updated_at,
+                        user_id,
+                        COALESCE(status, 'PENDING') as status,
+                        DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as created_at,
+                        DATE_FORMAT(COALESCE(updated_at, created_at), '%Y-%m-%d %H:%i:%s') as updated_at,
+                        '$type' as cert_type
+                    FROM $table";
+            
+            // Build the query based on role and status
+            $where = [];
+            $queryParams = [];
+            
+            // Always include status filter if statuses are defined for the role
+            if (!empty($statuses)) {
+                $placeholders = [];
+                foreach ($statuses as $i => $status) {
+                    $param = ":status_$i";
+                    $placeholders[] = $param;
+                    $queryParams[$param] = $status;
+                }
+                $where[] = "status IN (" . implode(',', $placeholders) . ")";
+            }
+            
+            // For Super Admin, if no specific statuses, include all non-null statuses
+            if ($adminRole === 'Super Admin' && empty($statuses)) {
+                $where[] = "status IS NOT NULL";
+            }
+            
+            // Add WHERE clause if needed
+            if (!empty($where)) {
+                $sql .= " WHERE " . implode(' AND ', $where);
+            } else {
+                // If no WHERE conditions, ensure we're not fetching everything
+                $sql .= " WHERE 1=1";
+            }
+            
+            // Add ORDER BY with proper table reference
+            $sql .= " ORDER BY $table.created_at DESC";
+            
+            error_log("Executing query for $table: " . str_replace(array_keys($queryParams), array_values($queryParams), $sql));
+            
+            // Prepare and execute the query
+            $stmt = $conn->prepare($sql);
+            
+            // Execute the query with error handling
+            try {
+                $stmt = $conn->prepare($sql);
+                
+                if (!$stmt) {
+                    throw new Exception("Failed to prepare query: " . implode(" ", $conn->errorInfo()));
+                }
+                
+                $executed = $stmt->execute($queryParams);
+                
+                if (!$executed) {
+                    $errorInfo = $stmt->errorInfo();
+                    throw new Exception("Query execution failed: " . ($errorInfo[2] ?? 'Unknown error'));
+                }
+                
+                // Fetch the results
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                error_log("Fetched " . count($results) . " records from $table");
+                
+            } catch (Exception $e) {
+                error_log("Error fetching certificates from $table: " . $e->getMessage());
+                // Continue to next certificate type instead of failing completely
+                continue;
+            }
+            
+            // Process and validate results
+            if (!is_array($results)) {
+                error_log("Unexpected result type from $table: " . gettype($results));
+                continue;
+            }
+            
+            // Add type to each result and add to response
+            foreach ($results as $row) {
+                if (!is_array($row)) {
+                    error_log("Skipping invalid row data from $table");
+                    continue;
+                }
+                
+                // Ensure required fields exist
+                $row['cert_type'] = $type;
+                $row['status'] = strtoupper($row['status'] ?? 'PENDING');
+                
+                // Add to response
+                $response['data']['certificates'][] = $row;
+                
+                // Update counts
+                $statusKey = strtolower($row['status']);
+                if (isset($response['data']['counts'][$statusKey])) {
+                    $response['data']['counts'][$statusKey]++;
+                }
+            }
+            
+            // Get counts for this table
+            $countSql = "SELECT 
+                            LOWER(COALESCE(status, 'PENDING')) as status, 
+                            COUNT(*) as count 
+                         FROM $table";
+            
+            $whereClauses = [];
+            if (!empty($statuses)) {
+                $placeholders = [];
+                foreach ($statuses as $i => $status) {
+                    $placeholders[] = ":status_$i";
+                    $queryParams[":status_$i"] = $status;
+    error_log('=== API Response Summary ===');
+    error_log("Total certificates: $certCount");
+    error_log('By type: ' . json_encode($certTypes));
+    error_log('By status: ' . json_encode($statusCounts));
+    
+    // Ensure response is properly formatted
+    if (!isset($response['success'])) {
+        $response['success'] = true;
+    }
+    
+    // Add debug info if in development
+    if (isset($_GET['debug'])) {
+        $response['debug'] = [
+            'session' => [
+                'role' => $adminRole,
+                'statuses' => $statuses,
+                'user_id' => $_SESSION['adminId'] ?? null
+            ],
+            'query' => [
+                'cert_types' => array_keys($certTypes),
+                'status_counts' => $statusCounts
+            ]
+        ];
+    }
+    
+    // Send the response
+    sendResponse($response);
+    
+} catch (Exception $e) {
+    $errorMessage = 'Error in get_certificates.php: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+    error_log($errorMessage);
+    error_log('Stack trace: ' . $e->getTraceAsString());
+    
+    // Log additional context
+    $context = [
+        'session' => [
+            'role' => $adminRole,
+            'user_id' => $_SESSION['adminId'] ?? null,
+            'is_admin' => $_SESSION['isAdmin'] ?? false
+        ],
+        'request' => [
+            'method' => $_SERVER['REQUEST_METHOD'],
+            'uri' => $_SERVER['REQUEST_URI'],
+            'query' => $_GET,
+            'post' => $_POST
+        ]
+    ];
+    
+    error_log('Error context: ' . print_r($context, true));
+    
+    // Return error response
+    $errorResponse = [
+        'success' => false,
+        'message' => 'An error occurred while fetching certificates. Please try again or contact support if the problem persists.',
+        'error' => $errorMessage
+    ];
+    
+    // Only include trace in debug mode
+    if (isset($_GET['debug'])) {
+        $errorResponse['debug'] = [
+            'trace' => $e->getTraceAsString(),
+            'context' => $context
+        ];
+    }
+    
+    sendResponse($errorResponse, 500);
+}
+
+// Close connection
+$conn = null;

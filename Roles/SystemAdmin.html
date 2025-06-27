@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Admin Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+:root {
+  --sidebar-width: 250px;
+  --primary-color: #4e73df;
+  --secondary-color: #f8f9fc;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fc;
+  overflow-x: hidden;
+}
+#sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: linear-gradient(180deg, var(--primary-color) 0%, #224abe 100%);
+  color: white;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+#content {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  min-height: 100vh;
+  transition: all 0.3s;
+}
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  ;
+}
+.sidebar-menu {
+  padding: 1rem 0;
+}
+.sidebar-menu .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1.5rem;
+  margin: 0.25rem 0;
+  border-left: 3px solid transparent;
+}
+.sidebar-menu .nav-link:hover, 
+.sidebar-menu .nav-link.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid white;
+}
+.sidebar-menu .nav-link i {
+  margin-right: 0.5rem;
+}
+.card {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+  margin-bottom: 1.5rem;
+}
+.card-header {
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
+  padding: 1rem 1.35rem;
+  font-weight: 600;
+}
+.stat-card {
+  border-left: 0.25rem solid var(--primary-color);
+}
+.stat-card .card-body {
+  padding: 1rem;
+}
+.stat-card .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.stat-card .stat-label {
+  font-size: 0.875rem;
+  color: #5a5c69;
+}
+.table-responsive {
+  overflow-x: auto;
+}
+.role-badge {
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  border-radius: 0.25rem;
+}
+.role-admin {
+  background-color: #f6c23e;
+  color: #1f2d3d;
+}
+.role-editor {
+  background-color: #36b9cc;
+  color: white;
+}
+.role-viewer {
+  background-color: #1cc88a;
+  color: white;
+}
+.role-guest {
+  background-color: #e74a3b;
+  color: white;
+}
+.role-selector {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.role-selector:hover {
+  transform: scale(1.1);
+}
+.content-field {
+  border: 1px solid #e3e6f0;
+  border-radius: 0.35rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: white;
+}
+.content-field h5 {
+  border-bottom: 1px solid #e3e6f0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+.backup-option {
+  border: 1px dashed #d1d3e2;
+  border-radius: 0.35rem;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+.backup-option:hover {
+  background-color: #f8f9fc;
+  border-color: var(--primary-color);
+}
+.backup-option i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+.event-log {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.event-log-item {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e3e6f0;
+}
+.event-log-item:last-child {
+  border-bottom: none;
+}
+.event-time {
+  font-size: 0.75rem;
+  color: #858796;
+}
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -250px;
+  }
+  #content {
+    width: 100%;
+    margin-left: 0;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #content.active {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+  }
+}
+
+.Admin-Header{
+  display: flex;
+}
+</style>
+</head>
+<body>
+<div id="sidebar">
+  <div class="sidebar-header">
+    <h3 class="Admin-Header">System Admin Portal</h3><br>
+    <button id="sidebarToggle" class="btn btn-link d-md-none">
+      <i class="bi bi-x text-white" style="font-size: 1.5rem;"></i>
+    </button>
+      <p id="adminInfo" style="margin-bottom: 20px;"></p>
+
+  </div>
+  <div class="sidebar-menu">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active" href="#dashboard" data-section="dashboard">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#users" data-section="users">
+          <i class="bi bi-people"></i> User Management
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#content" data-section="content">
+          <i class="bi bi-file-earmark-text"></i> Content Management
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#backups" data-section="backups">
+          <i class="bi bi-database"></i> Backup System
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#logs" data-section="logs">
+          <i class="bi bi-list-check"></i> Event Logs
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html">
+          <i class="bi bi-"></i> Landing Page
+        </a>
+      </li>
+
+      <a class="nav-link" href="../AdminPortal/AdminDashboard.html" data-role="Super Admin">
+        <i class="bi bi-display me-1"></i> Admin Dashboard
+      </a>
+
+      <li class="nav-item mt-4">
+        <a class="nav-link" href="AdminPortal/AdminLogin.html" id="logoutBtn">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div id="content">
+  <!-- Top Navigation -->
+  <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow">
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+      <i class="bi bi-list"></i>
+    </button>
+    <ul class="navbar-nav ms-auto">
+      <div class="topbar-divider d-none d-sm-block"></div>
+      <li class="nav-item dropdown no-arrow">
+        <a class="nav-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="cursor: default;">System Admin</span>
+          <i class="bi bi-person mr-2" style="cursor: default;"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Dashboard Sections -->
+  <div class="container-fluid">
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="dashboard-section">
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+          <i class="bi bi-download text-white-50"></i> Generate Report
+        </button>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stat-card shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stat-label text-uppercase text-primary font-weight-bold">Active Users</div>
+                  <div class="stat-value text-gray-800" id="activeUsersCount">0</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stat-card shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stat-label text-uppercase text-success font-weight-bold">Content Pages</div>
+                  <div class="stat-value text-gray-800" id="contentPagesCount">0</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-file-earmark-text text-success" style="font-size: 2rem;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stat-card shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stat-label text-uppercase text-info font-weight-bold">Backups This Month</div>
+                  <div class="stat-value text-gray-800" id="backupsCount">0</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-database text-info" style="font-size: 2rem;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card stat-card shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="stat-label text-uppercase text-warning font-weight-bold">Security Events</div>
+                  <div class="stat-value text-gray-800" id="securityEventsCount">0</div>
+                </div>
+                <div class="col-auto">
+                  <i class="bi bi-shield-lock text-warning" style="font-size: 2rem;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+            </div>
+            <div class="card-body">
+              <div class="event-log" id="recentActivityLog"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">User Role Distribution</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-pie pt-4 pb-2">
+                <canvas id="roleDistributionChart" height="200"></canvas>
+              </div>
+              <div class="mt-4 text-center small">
+                <span class="mr-2"><i class="fas fa-circle text-primary"></i> Admin</span>
+                <span class="mr-2"><i class="fas fa-circle text-success"></i> Editor</span>
+                <span class="mr-2"><i class="fas fa-circle text-info"></i> Viewer</span>
+                <span class="mr-2"><i class="fas fa-circle text-warning"></i> Guest</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Management Section -->
+    <div id="usersSection" class="dashboard-section" style="display: none;">
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+          <i class="bi bi-plus-circle text-white-50"></i> Add User
+        </button>
+      </div>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">System Users</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Last Active</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Management Section -->
+    <div id="contentSection" class="dashboard-section" style="display: none;">
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Content Management</h1>
+        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="saveContentBtn">
+          <i class="bi bi-save text-white-50"></i> Save All Changes
+        </button>
+      </div>
+
+
+  <!-- Page Selector -->
+  <div class="mb-3">
+    <label for="pageSelect" class="form-label">Select Page:</label>
+    <select id="pageSelect" class="form-select w-auto">
+      <option value="index">Index (Homepage)</option>
+      <option value="certificate">Certificate Page</option>
+    </select>
+  </div>
+
+  <!-- Content Editor Card -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">Website Content</h6>
+      <button class="btn btn-sm btn-secondary" id="addContentFieldBtn">
+        <i class="bi bi-plus-lg"></i> Add Field
+      </button>
+    </div>
+    <div class="card-body" id="contentFieldsContainer">
+      <!-- Content fields for selected page will appear here -->
+    </div>
+  </div>
+</div>
+
+
+
+<div id="backupsSection" class="dashboard-section" style="display: none;">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Backup System</h1>
+    <div>
+      <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm me-2" id="runBackupBtn">
+        <i class="bi bi-database text-white-50"></i> Run Backup Now
+      </button>
+      <button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" id="scheduleBackupBtn">
+        <i class="bi bi-clock text-white-50"></i> Schedule Backup
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Quick Backup Options</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="backup-option" data-type="full">
+                <i class="bi bi-database"></i>
+                <h5>Full Backup</h5>
+                <p class="text-muted">Backup entire system including database and files</p>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="backup-option" data-type="database">
+                <i class="bi bi-table"></i>
+                <h5>Database Only</h5>
+                <p class="text-muted">Backup only the database content</p>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="backup-option" data-type="files">
+                <i class="bi bi-folder"></i>
+                <h5>Files Only</h5>
+                <p class="text-muted">Backup only the file system</p>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="backup-option" data-type="config">
+                <i class="bi bi-gear"></i>
+                <h5>Config Only</h5>
+                <p class="text-muted">Backup only configuration files</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Recent Backups</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Size</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="backupsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="logsSection" class="dashboard-section" style="display: none;">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">System Event Logs</h1>
+    <div>
+      <button class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm me-2" id="clearLogsBtn">
+        <i class="bi bi-trash text-white-50"></i> Clear Logs
+      </button>
+      <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="exportLogsBtn">
+        <i class="bi bi-download text-white-50"></i> Export Logs
+      </button>
+    </div>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">Recent Events</h6>
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle" href="#" role="button" id="filterLogsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-filter"></i> Filter
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="filterLogsDropdown">
+          <li><a class="dropdown-item filter-log" href="#" data-level="all">All Events</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item filter-log" href="#" data-level="info">Information</a></li>
+          <li><a class="dropdown-item filter-log" href="#" data-level="warning">Warnings</a></li>
+          <li><a class="dropdown-item filter-log" href="#" data-level="error">Errors</a></li>
+          <li><a class="dropdown-item filter-log" href="#" data-level="security">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="event-log" id="systemEventLog"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm">
+          <div class="mb-3">
+            <label for="newUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="newUsername" required>
+          </div>
+          <div class="mb-3">
+            <label for="newEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="newEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="newPassword" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <div class="d-flex justify-content-between">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="newUserRole" id="newRoleAdmin" value="admin" checked>
+                <label class="form-check-label" for="newRoleAdmin">Admin</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="newUserRole" id="newRoleEditor" value="editor">
+                <label class="form-check-label" for="newRoleEditor">Editor</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="newUserRole" id="newRoleViewer" value="viewer">
+                <label class="form-check-label" for="newRoleViewer">Viewer</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="newUserRole" id="newRoleGuest" value="guest">
+                <label class="form-check-label" for="newRoleGuest">Guest</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmAddUser">Add User</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <input type="hidden" id="editUserId">
+          <div class="mb-3">
+            <label for="editUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="editUsername" required>
+          </div>
+          <div class="mb-3">
+            <label for="editEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="editEmail" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <div class="d-flex justify-content-between">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserRole" id="editRoleAdmin" value="admin">
+                <label class="form-check-label" for="editRoleAdmin">Admin</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserRole" id="editRoleEditor" value="editor">
+                <label class="form-check-label" for="editRoleEditor">Editor</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserRole" id="editRoleViewer" value="viewer">
+                <label class="form-check-label" for="editRoleViewer">Viewer</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserRole" id="editRoleGuest" value="guest">
+                <label class="form-check-label" for="editRoleGuest">Guest</label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <div class="d-flex justify-content-between">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserStatus" id="editStatusActive" value="active" checked>
+                <label class="form-check-label" for="editStatusActive">Active</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserStatus" id="editStatusInactive" value="inactive">
+                <label class="form-check-label" for="editStatusInactive">Inactive</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="editUserStatus" id="editStatusSuspended" value="suspended">
+                <label class="form-check-label" for="editStatusSuspended">Suspended</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmEditUser">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUserModalLabel">Confirm User Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+        <p class="fw-bold" id="deleteUserName"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteUser">Delete User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Content Field Modal -->
+<div class="modal fade" id="addContentFieldModal" tabindex="-1" aria-labelledby="addContentFieldModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addContentFieldModalLabel">Add New Content Field</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addContentFieldForm">
+          <div class="mb-3">
+            <label for="newFieldName" class="form-label">Field Name</label>
+            <input type="text" class="form-control" id="newFieldName" placeholder="e.g., homepage_heading" required>
+            <div class="form-text">Use lowercase with underscores (snake_case)</div>
+          </div>
+          <div class="mb-3">
+            <label for="newFieldLabel" class="form-label">Display Label</label>
+            <input type="text" class="form-control" id="newFieldLabel" placeholder="e.g., Homepage Heading" required>
+          </div>
+          <div class="mb-3">
+            <label for="newFieldType" class="form-label">Field Type</label>
+            <select class="form-select" id="newFieldType" required>
+              <option value="text">Text</option>
+              <option value="textarea">Text Area</option>
+              <option value="richtext">Rich Text</option>
+              <option value="image">Image</option>
+              <option value="number">Number</option>
+              <option value="boolean">Yes/No</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmAddContentField">Add Field</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backup Options Modal -->
+<div class="modal fade" id="backupOptionsModal" tabindex="-1" aria-labelledby="backupOptionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="backupOptionsModalLabel">Backup Options</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="backupOptionsForm">
+          <div class="mb-3">
+            <label for="backupType" class="form-label">Backup Type</label>
+            <select class="form-select" id="backupType" required>
+              <option value="full">Full System Backup</option>
+              <option value="database">Database Only</option>
+              <option value="files">Files Only</option>
+              <option value="config">Configuration Only</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="backupName" class="form-label">Backup Name</label>
+            <input type="text" class="form-control" id="backupName" required>
+          </div>
+          <div class="mb-3">
+            <label for="backupDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="backupDescription" rows="3"></textarea>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="backupCompress">
+            <label class="form-check-label" for="backupCompress">Compress Backup</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmBackup">Run Backup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Schedule Backup Modal -->
+<div class="modal fade" id="scheduleBackupModal" tabindex="-1" aria-labelledby="scheduleBackupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scheduleBackupModalLabel">Schedule Backup</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="scheduleBackupForm">
+          <div class="mb-3">
+            <label for="scheduleBackupType" class="form-label">Backup Type</label>
+            <select class="form-select" id="scheduleBackupType" required>
+              <option value="full">Full System Backup</option>
+              <option value="database">Database Only</option>
+              <option value="files">Files Only</option>
+              <option value="config">Configuration Only</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="scheduleFrequency" class="form-label">Frequency</label>
+            <select class="form-select" id="scheduleFrequency" required>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+          <div class="mb-3" id="customScheduleGroup" style="display: none;">
+            <label for="customSchedule" class="form-label">Custom Schedule (Cron Expression)</label>
+            <input type="text" class="form-control" id="customSchedule" placeholder="e.g., 0 0 * * *">
+          </div>
+          <div class="mb-3">
+            <label for="scheduleStartDate" class="form-label">Start Date/Time</label>
+            <input type="datetime-local" class="form-control" id="scheduleStartDate" required>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="scheduleEnabled" checked>
+            <label class="form-check-label" for="scheduleEnabled">Enabled</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmScheduleBackup">Schedule Backup</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- View Backup Modal -->
+<div class="modal fade" id="viewBackupModal" tabindex="-1" aria-labelledby="viewBackupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewBackupModalLabel">Backup Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <p><strong>Backup Name:</strong> <span id="backupDetailName"></span></p>
+            <p><strong>Type:</strong> <span id="backupDetailType"></span></p>
+            <p><strong>Date:</strong> <span id="backupDetailDate"></span></p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Size:</strong> <span id="backupDetailSize"></span></p>
+            <p><strong>Status:</strong> <span id="backupDetailStatus"></span></p>
+          </div>
+        </div>
+        <div class="mb-3">
+          <h6>Description</h6>
+          <p id="backupDetailDescription"></p>
+        </div>
+        <div class="mb-3">
+          <h6>Contents</h6>
+          <pre id="backupDetailContents" style="max-height: 300px; overflow-y: auto; background: #f8f9fa; padding: 1rem; border-radius: 0.25rem;"></pre>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="restoreBackupBtn">Restore</button>
+        <button type="button" class="btn btn-danger" id="deleteBackupBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="SystemAdmin.js"></script>
+
+<!-- Load admin accounts from AdminLogin.js -->
+<script src="../AdminPortal/AdminLogin.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const adminList = window.ADMIN_ACCOUNTS || [];
+  let users = JSON.parse(sessionStorage.getItem('users')) || [];
+
+  adminList.forEach(admin => {
+    const existingIndex = users.findIndex(user => user.username === admin.username);
+
+    if (existingIndex === -1) {
+      // New admin not in users list
+      users.push({
+        id: users.length + 1,
+        username: admin.username,
+        email: admin.username + "@civilregistry.gov",
+        role: admin.role,
+        status: "inactive",       //  Not logged in yet
+        lastActive: null
+      });
+    } else {
+      // Optional: ensure role/email stay in sync if ever changed in ADMIN_ACCOUNTS
+      users[existingIndex].role = admin.role;
+      users[existingIndex].email = admin.username + "@civilregistry.gov";
+    }
+  });
+
+  sessionStorage.setItem('users', JSON.stringify(users));
+
+  // ✅ Refresh the UI
+  if (typeof loadUsers === "function") loadUsers();
+  if (typeof loadDashboardData === "function") loadDashboardData();
+});
+</script>
+
+
+<script src="rolesidebarVisibility.js"></script>
+</body>
+</html>

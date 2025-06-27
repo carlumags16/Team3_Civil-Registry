@@ -398,3 +398,81 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+function openCertificate(certificateType) {
+    // Hide all certificate contents
+    var contents = document.getElementsByClassName("correction-type");
+    for (var i = 0; i < contents.length; i++) {
+        contents[i].style.display = "none";
+    }
+    
+    // Remove active class from all tabs
+    var tabs = document.getElementsByClassName("certificate-tab");
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+    }
+    
+    // Show the selected certificate content and mark tab as active
+    document.getElementById(certificateType).style.display = "block";
+    event.currentTarget.classList.add("active");
+}
+window.openCertificate = openCertificate;
+
+document.addEventListener('DOMContentLoaded', function () {
+  const downloadBtn = document.getElementById('downloadRequirementsBtn');
+
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // 1. Clone the requirements content
+      const originalContent = document.querySelector('.requirements-content');
+      const clonedContent = originalContent.cloneNode(true);
+
+      // 2. Force all hidden elements to be shown
+      clonedContent.querySelectorAll('.tab-content, .correction-type').forEach(el => {
+        el.style.display = 'block';
+        el.style.pageBreakInside = 'avoid';
+        el.style.breakInside = 'avoid';
+        el.style.marginBottom = '20px';
+        el.style.padding = '10px';
+        el.style.background = '#fff';
+      });
+
+      clonedContent.querySelectorAll('ul').forEach(ul => {
+        ul.style.marginBottom = '15px';
+      });
+
+      const tempContainer = document.createElement('div');
+      tempContainer.style.position = 'absolute';
+      tempContainer.style.top = '-9999px';
+      tempContainer.style.left = '-9999px';
+      tempContainer.style.width = '900px'; 
+      tempContainer.style.fontFamily = 'Arial, sans-serif';
+      tempContainer.style.lineHeight = '1.6';
+      tempContainer.style.fontSize = '12px';
+      tempContainer.appendChild(clonedContent);
+      document.body.appendChild(tempContainer);
+
+      html2pdf()
+        .from(clonedContent)
+        .set({
+          filename: 'Civil_Registry_Requirements.pdf',
+          margin: [0.3, 0.3, 0.3, 0.3], 
+          html2canvas: {
+            scale: 2,
+            scrollY: 0
+          },
+          jsPDF: {
+            unit: 'in',
+            format: 'a4',
+            orientation: 'portrait'
+          }
+        })
+        .save()
+        .then(() => {
+          document.body.removeChild(tempContainer);
+        });
+    });
+  }
+});

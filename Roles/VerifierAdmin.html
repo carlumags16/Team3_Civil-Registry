@@ -514,12 +514,12 @@ tr:hover {
     <div class="card">
       <div class="card-icon"><i class="fas fa-tasks"></i></div>
       <h3>Pending Verification</h3>
-      <p>24 documents awaiting your review</p>
+      <p><span id="pendingCount">0</span> documents awaiting your review</p>
     </div>
     <div class="card">
       <div class="card-icon"><i class="fas fa-check-circle"></i></div>
       <h3>Verified Today</h3>
-      <p>8 documents verified</p>
+      <p><span id="verifiedTodayCount">0</span> documents verified</p>
     </div>
     <div class="card">
       <div class="card-icon"><i class="fas fa-clock"></i></div>
@@ -549,7 +549,7 @@ tr:hover {
       <table>
         <thead>
           <tr>
-            <th>Document ID</th>
+            <th>Reference Number</th>
             <th>Applicant Name</th>
             <th>Document Type</th>
             <th>Date Submitted</th>
@@ -557,6 +557,7 @@ tr:hover {
             <th>Actions</th>
           </tr>
         </thead>
+        <tbody id="pendingVerificationTableBody"></tbody>
       </table>
     </div>
   </div>

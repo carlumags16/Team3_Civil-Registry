@@ -568,39 +568,30 @@ tr:hover {
     <p id="adminInfo"></p>
   </div>
   <nav class="sidebar-nav">
-
-    <!-- Super Admin Only -->
-    <a href="#" class="menu-item" data-role="Super Admin">
-      <i class="fas fa-users-cog mr-2"></i> Manage Admin Users
+    <!-- Super Admin Dashboard Links -->
+    <a href="../Roles/SystemAdmin.html" class="menu-item" data-role="System Admin">
+      <i class="fas fa-users-cog mr-2"></i> System Admin
     </a>
-    <a href="#" class="menu-item" data-role="Super Admin">
-      <i class="fas fa-database mr-2"></i> All Transactions
+    <a href="../Roles/ReceivingAdmin.html" class="menu-item" data-role="Receiving Clerk">
+      <i class="fas fa-inbox mr-2"></i> Receiving Clerk
+    </a>
+    <a href="../Roles/VerifierAdmin.html" class="menu-item" data-role="Verifying Officer">
+      <i class="fas fa-tasks mr-2"></i> Verifier
+    </a>
+    <a href="../Roles/CashierAdmin.html" class="menu-item" data-role="Cashier">
+      <i class="fas fa-money-check-alt mr-2"></i> Cashier
+    </a>
+    <a href="../Roles/SignatoryAdmin.html" class="menu-item" data-role="Document Signatory Officer">
+      <i class="fas fa-signature mr-2"></i> Signatory
+    </a>
+    <a href="../Roles/ReleasingAdmin.html" class="menu-item" data-role="Releasing Officer">
+      <i class="fas fa-file mr-2"></i> Releasing
     </a>
 
     <!-- Shared/Dashboard -->
     <!-- APPLICATION, PROCESSING, AND INTAKE Clerk -->
     <a href="../AdminPortal/AdminDashboard.html" class="menu-item" data-visible-to="all">
       <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
-    </a>
-
-    <!-- Verifying Officer -->
-    <a href="../Roles/VerifierAdmin.html" class="menu-item" data-role="Verifying Officer">
-      <i class="fas fa-tasks mr-2"></i> Validate Requests
-    </a>
-
-     <!-- Cashier Admin -->
-    <a href="../Roles/CashierAdmin.html" class="menu-item" data-role="Cashier">
-      <i class="fas fa-money-check-alt mr-2"></i> Transaction Payments
-    </a>
-
-    <!-- Document Signatory Officer -->
-    <a href="../Roles/SignatoryAdmin.html" class="menu-item" data-role="Document Signatory Officer">
-      <i class="fas fa-signature mr-2"></i> Signature
-    </a>
-
-    <!-- Releasing Officer -->
-    <a href="../Roles/ReleasingAdmin.html" class="menu-item" data-role="Releasing Officer">
-      <i class="fas fa-file mr-2"></i> Document Releasing
     </a>
 
     <!-- Report Admin -->
@@ -639,7 +630,7 @@ tr:hover {
         <div class="card-title">Today's Transactions</div>
         <i class="fas fa-exchange-alt" style="color: var(--primary);"></i>
       </div>
-      <div class="card-value"></div>
+      <div class="card-value" id="todaysTransactions"></div>
       <div class="card-footer">
         <i class="fas fa-arrow-up positive"></i>
         <span class="positive"></span>
@@ -650,7 +641,7 @@ tr:hover {
         <div class="card-title">Pending Payments</div>
         <i class="fas fa-clock" style="color: var(--warning);"></i>
       </div>
-      <div class="card-value"></div>
+      <div class="card-value" id="pendingPayments"></div>
       <div class="card-footer">
         <i class="fas fa-arrow-down negative"></i>
         <span class="negative"></span>
@@ -661,18 +652,7 @@ tr:hover {
         <div class="card-title">Completed Today</div>
         <i class="fas fa-check-circle" style="color: var(--success);"></i>
       </div>
-      <div class="card-value"></div>
-      <div class="card-footer">
-        <i class="fas fa-arrow-up positive"></i>
-        <span class="positive"></span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">New Clients</div>
-        <i class="fas fa-user-plus" style="color: var(--secondary);"></i>
-      </div>
-      <div class="card-value"></div>
+      <div class="card-value" id="completedToday"></div>
       <div class="card-footer">
         <i class="fas fa-arrow-up positive"></i>
         <span class="positive"></span>
@@ -698,8 +678,8 @@ tr:hover {
       <table>
         <thead>
           <tr>
-            <th>Transaction ID</th>
-            <th>Client</th>
+            <th>Reference Number</th>
+            <th>Transaction Number</th>
             <th>Service</th>
             <th>Amount</th>
             <th>Date</th>
@@ -707,6 +687,7 @@ tr:hover {
             <th>Action</th>
           </tr>
         </thead>
+        <tbody id="cashierTableBody"></tbody>
       </table>
     </div>
     </div>
