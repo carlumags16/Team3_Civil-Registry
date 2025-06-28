@@ -1,0 +1,276 @@
+[2025-06-27 13:39:10] === New Request ===
+[2025-06-27 13:39:10] Request Method: POST
+[2025-06-27 13:39:10] Request URI: /Team3_Civil-Registry/Roles/process_status.php
+[2025-06-27 13:39:10] Session ID: g34dclptclp0et27of6jsqk7s7
+[2025-06-27 13:39:10] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => WalangReceive
+    [adminRole] => Receiving Clerk
+)
+
+[2025-06-27 13:39:10] Admin Role: Receiving Clerk
+[2025-06-27 13:39:10] Is Admin: Yes
+[2025-06-27 13:39:10] Querying table: death_certi for cert ID: 46
+[2025-06-27 13:39:10] Columns in death_certi: id, user_id, dead_firstname, dead_middlename, dead_lastname, dead_suffix, date_birth, date_death, sexual_orientation, nationality, place_death, address, address_option, purpose_certi, number_copies, created_at, status, updated_at, updated_by, amount
+[2025-06-27 13:39:10] SQL Query: SELECT status as status FROM death_certi WHERE id = ?
+[2025-06-27 13:39:10] Retrieved certificate data: Array
+(
+    [status] => PENDING
+)
+
+[2025-06-27 13:39:10] Current status (after processing): PENDING
+[2025-06-27 13:39:10] === DEBUG: Authorization Check ===
+[2025-06-27 13:39:10] Admin Role: Receiving Clerk
+[2025-06-27 13:39:10] Current Status: PENDING
+[2025-06-27 13:39:10] Requested New Status: RECEIVED
+[2025-06-27 13:39:10] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => WalangReceive
+    [adminRole] => Receiving Clerk
+)
+
+[2025-06-27 13:39:10] Allowed Transitions: Array
+(
+    [Receiving Clerk] => Array
+        (
+            [PENDING] => RECEIVED
+        )
+
+    [Verifying Officer] => Array
+        (
+            [RECEIVED] => PROCESSING
+            [PROCESSING] => Array
+                (
+                    [0] => APPROVED
+                    [1] => REJECTED
+                )
+
+        )
+
+    [Cashier] => Array
+        (
+            [PROCESSING] => Array
+                (
+                    [0] => PAID
+                )
+
+            [APPROVED] => Array
+                (
+                    [0] => PAID
+                    [1] => UNPAID
+                )
+
+        )
+
+    [Document Signatory Officer] => Array
+        (
+            [PAID] => SIGNED
+        )
+
+    [Releasing Officer] => Array
+        (
+            [SIGNED] => READY_FOR_RELEASE
+            [READY_FOR_RELEASE] => RELEASED
+        )
+
+)
+
+[2025-06-27 13:39:10] Transitions for this role (Receiving Clerk): Array
+(
+    [PENDING] => RECEIVED
+)
+
+[2025-06-27 13:39:25] === New Request ===
+[2025-06-27 13:39:25] Request Method: POST
+[2025-06-27 13:39:25] Request URI: /Team3_Civil-Registry/Roles/process_status.php
+[2025-06-27 13:39:25] Session ID: g34dclptclp0et27of6jsqk7s7
+[2025-06-27 13:39:25] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => BurecheVerify
+    [adminRole] => Verifying Officer
+)
+
+[2025-06-27 13:39:25] Admin Role: Verifying Officer
+[2025-06-27 13:39:25] Is Admin: Yes
+[2025-06-27 13:39:25] Querying table: death_certi for cert ID: 46
+[2025-06-27 13:39:25] Columns in death_certi: id, user_id, dead_firstname, dead_middlename, dead_lastname, dead_suffix, date_birth, date_death, sexual_orientation, nationality, place_death, address, address_option, purpose_certi, number_copies, created_at, status, updated_at, updated_by, amount
+[2025-06-27 13:39:25] SQL Query: SELECT status as status FROM death_certi WHERE id = ?
+[2025-06-27 13:39:25] Retrieved certificate data: Array
+(
+    [status] => RECEIVED
+)
+
+[2025-06-27 13:39:25] Current status (after processing): RECEIVED
+[2025-06-27 13:39:25] === DEBUG: Authorization Check ===
+[2025-06-27 13:39:25] Admin Role: Verifying Officer
+[2025-06-27 13:39:25] Current Status: RECEIVED
+[2025-06-27 13:39:25] Requested New Status: PROCESSING
+[2025-06-27 13:39:25] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => BurecheVerify
+    [adminRole] => Verifying Officer
+)
+
+[2025-06-27 13:39:25] Allowed Transitions: Array
+(
+    [Receiving Clerk] => Array
+        (
+            [PENDING] => RECEIVED
+        )
+
+    [Verifying Officer] => Array
+        (
+            [RECEIVED] => PROCESSING
+            [PROCESSING] => Array
+                (
+                    [0] => APPROVED
+                    [1] => REJECTED
+                )
+
+        )
+
+    [Cashier] => Array
+        (
+            [PROCESSING] => Array
+                (
+                    [0] => PAID
+                )
+
+            [APPROVED] => Array
+                (
+                    [0] => PAID
+                    [1] => UNPAID
+                )
+
+        )
+
+    [Document Signatory Officer] => Array
+        (
+            [PAID] => SIGNED
+        )
+
+    [Releasing Officer] => Array
+        (
+            [SIGNED] => READY_FOR_RELEASE
+            [READY_FOR_RELEASE] => RELEASED
+        )
+
+)
+
+[2025-06-27 13:39:25] Transitions for this role (Verifying Officer): Array
+(
+    [RECEIVED] => PROCESSING
+    [PROCESSING] => Array
+        (
+            [0] => APPROVED
+            [1] => REJECTED
+        )
+
+)
+
+[2025-06-27 13:39:31] === New Request ===
+[2025-06-27 13:39:31] Request Method: POST
+[2025-06-27 13:39:31] Request URI: /Team3_Civil-Registry/Roles/process_status.php
+[2025-06-27 13:39:31] Session ID: g34dclptclp0et27of6jsqk7s7
+[2025-06-27 13:39:31] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => BurecheVerify
+    [adminRole] => Verifying Officer
+)
+
+[2025-06-27 13:39:31] Admin Role: Verifying Officer
+[2025-06-27 13:39:31] Is Admin: Yes
+[2025-06-27 13:39:31] Querying table: death_certi for cert ID: 46
+[2025-06-27 13:39:31] Columns in death_certi: id, user_id, dead_firstname, dead_middlename, dead_lastname, dead_suffix, date_birth, date_death, sexual_orientation, nationality, place_death, address, address_option, purpose_certi, number_copies, created_at, status, updated_at, updated_by, amount
+[2025-06-27 13:39:31] SQL Query: SELECT status as status FROM death_certi WHERE id = ?
+[2025-06-27 13:39:31] Retrieved certificate data: Array
+(
+    [status] => PROCESSING
+)
+
+[2025-06-27 13:39:31] Current status (after processing): PROCESSING
+[2025-06-27 13:39:31] === DEBUG: Authorization Check ===
+[2025-06-27 13:39:31] Admin Role: Verifying Officer
+[2025-06-27 13:39:31] Current Status: PROCESSING
+[2025-06-27 13:39:31] Requested New Status: APPROVED
+[2025-06-27 13:39:31] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => BurecheVerify
+    [adminRole] => Verifying Officer
+)
+
+[2025-06-27 13:39:31] Allowed Transitions: Array
+(
+    [Receiving Clerk] => Array
+        (
+            [PENDING] => RECEIVED
+        )
+
+    [Verifying Officer] => Array
+        (
+            [RECEIVED] => PROCESSING
+            [PROCESSING] => Array
+                (
+                    [0] => APPROVED
+                    [1] => REJECTED
+                )
+
+        )
+
+    [Cashier] => Array
+        (
+            [PROCESSING] => Array
+                (
+                    [0] => PAID
+                )
+
+            [APPROVED] => Array
+                (
+                    [0] => PAID
+                    [1] => UNPAID
+                )
+
+        )
+
+    [Document Signatory Officer] => Array
+        (
+            [PAID] => SIGNED
+        )
+
+    [Releasing Officer] => Array
+        (
+            [SIGNED] => READY_FOR_RELEASE
+            [READY_FOR_RELEASE] => RELEASED
+        )
+
+)
+
+[2025-06-27 13:39:31] Transitions for this role (Verifying Officer): Array
+(
+    [RECEIVED] => PROCESSING
+    [PROCESSING] => Array
+        (
+            [0] => APPROVED
+            [1] => REJECTED
+        )
+
+)
+

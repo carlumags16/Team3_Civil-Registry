@@ -1,0 +1,24 @@
+[2025-06-27 13:40:02] === New Payment Request ===
+[2025-06-27 13:40:02] Request Method: POST
+[2025-06-27 13:40:02] Session ID: g34dclptclp0et27of6jsqk7s7
+[2025-06-27 13:40:02] Session Data: Array
+(
+    [user_id] => 32
+    [username] => carl456
+    [isAdmin] => 1
+    [adminUsername] => SheytNasanAkinSalamin
+    [adminRole] => Cashier
+)
+
+[2025-06-27 13:40:02] Input data: Array
+(
+    [cert_id] => 39
+    [cert_type] => death
+    [status] => PAID
+    [amount] => 0
+    [payment_method] => cash
+)
+
+[2025-06-27 13:40:02] Successfully updated document status to PAID for cert ID 39
+[2025-06-27 13:40:02] Certificate type: Death Certificate
+[2025-06-27 13:40:02] Updated death_certi status to PAID

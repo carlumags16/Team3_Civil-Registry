@@ -1,0 +1,62 @@
+
+[2025-06-27 13:39:24]
+SQL Table: death_certi
+Type Label: Death Certificate
+Cert ID: 46
+Fetched: Array
+(
+    [id] => 46
+    [user_id] => 32
+    [dead_firstname] => A
+    [dead_middlename] => A
+    [dead_lastname] => A
+    [dead_suffix] => N/A
+    [date_birth] => 2025-06-17
+    [date_death] => 2025-06-26
+    [sexual_orientation] => Male
+    [nationality] => Filipino
+    [place_death] => 
+    [address] => 1543 Milagros St.
+    [address_option] => Delivery
+    [purpose_certi] => legal_and_administrative_purposes
+    [number_copies] => 1
+    [created_at] => 2025-06-27 19:34:59
+    [status] => RECEIVED
+    [updated_at] => 2025-06-27 19:39:10
+    [updated_by] => 0
+    [amount] => 710.00
+    [reference_number] => REG-00031
+    [certif_type] => Death Certificate
+)
+
+
+[2025-06-27 13:39:27]
+SQL Table: death_certi
+Type Label: Death Certificate
+Cert ID: 46
+Fetched: Array
+(
+    [id] => 46
+    [user_id] => 32
+    [dead_firstname] => A
+    [dead_middlename] => A
+    [dead_lastname] => A
+    [dead_suffix] => N/A
+    [date_birth] => 2025-06-17
+    [date_death] => 2025-06-26
+    [sexual_orientation] => Male
+    [nationality] => Filipino
+    [place_death] => 
+    [address] => 1543 Milagros St.
+    [address_option] => Delivery
+    [purpose_certi] => legal_and_administrative_purposes
+    [number_copies] => 1
+    [created_at] => 2025-06-27 19:34:59
+    [status] => PROCESSING
+    [updated_at] => 2025-06-27 19:39:25
+    [updated_by] => 0
+    [amount] => 710.00
+    [reference_number] => REG-00031
+    [certif_type] => Death Certificate
+)
+

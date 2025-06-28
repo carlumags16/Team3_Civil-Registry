@@ -1,0 +1,2260 @@
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:36 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:52 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:53 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:38:55 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1 AND birth_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1 AND death_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 2 rows. First row: Array
+(
+    [id] => 45
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-27 11:47:55
+    [created_at] => 2025-06-27 11:47:55
+    [status] => PENDING
+    [reference_number] => REG-00030
+    [transaction_number] => REF202506272116
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 45
+            [username] => carl456
+            [created_at] => 2025-06-27 11:47:55
+            [status] => PENDING
+            [reference_number] => REG-00030
+            [transaction_number] => REF202506272116
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Martin
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-18
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => Filipino
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Delivery
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 11:47:55
+            [updated_by] => 
+        )
+
+)
+
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1 AND marriage_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1 AND cenomar_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1 AND cenodeath_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:04 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1 AND birth_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1 AND death_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 1 rows. First row: Array
+(
+    [id] => 45
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-27 11:47:55
+    [created_at] => 2025-06-27 11:47:55
+    [status] => PENDING
+    [reference_number] => REG-00030
+    [transaction_number] => REF202506272116
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 45
+            [username] => carl456
+            [created_at] => 2025-06-27 11:47:55
+            [status] => PENDING
+            [reference_number] => REG-00030
+            [transaction_number] => REF202506272116
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Martin
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-18
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => Filipino
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Delivery
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 11:47:55
+            [updated_by] => 
+        )
+
+)
+
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1 AND marriage_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1 AND cenomar_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1 AND cenodeath_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:39:11 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:21 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:25 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:31 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:39:38 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:40:08 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:42:16 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1 AND birth_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1 AND death_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 1 rows. First row: Array
+(
+    [id] => 45
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-27 11:47:55
+    [created_at] => 2025-06-27 11:47:55
+    [status] => PENDING
+    [reference_number] => REG-00030
+    [transaction_number] => REF202506272116
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 45
+            [username] => carl456
+            [created_at] => 2025-06-27 11:47:55
+            [status] => PENDING
+            [reference_number] => REG-00030
+            [transaction_number] => REF202506272116
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Martin
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-18
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => Filipino
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Delivery
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 11:47:55
+            [updated_by] => 
+        )
+
+)
+
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1 AND marriage_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1 AND cenomar_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1 AND cenodeath_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:44:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1 AND birth_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1 AND death_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 1 rows. First row: Array
+(
+    [id] => 45
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-27 11:47:55
+    [created_at] => 2025-06-27 11:47:55
+    [status] => PENDING
+    [reference_number] => REG-00030
+    [transaction_number] => REF202506272116
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 45
+            [username] => carl456
+            [created_at] => 2025-06-27 11:47:55
+            [status] => PENDING
+            [reference_number] => REG-00030
+            [transaction_number] => REF202506272116
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Martin
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-18
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => Filipino
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Delivery
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 11:47:55
+            [updated_by] => 
+        )
+
+)
+
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1 AND marriage_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1 AND cenomar_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1 AND cenodeath_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:45:05 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1 AND birth_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1 AND death_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 1 rows. First row: Array
+(
+    [id] => 45
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-27 11:47:55
+    [created_at] => 2025-06-27 11:47:55
+    [status] => PENDING
+    [reference_number] => REG-00030
+    [transaction_number] => REF202506272116
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 45
+            [username] => carl456
+            [created_at] => 2025-06-27 11:47:55
+            [status] => PENDING
+            [reference_number] => REG-00030
+            [transaction_number] => REF202506272116
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Martin
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-18
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => Filipino
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Delivery
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 11:47:55
+            [updated_by] => 
+        )
+
+)
+
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1 AND marriage_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1 AND cenomar_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1 AND cenodeath_certi.status = 'PENDING', params=[]
+[27-Jun-2025 13:47:01 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:47:23 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:49:53 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, docType=Birth Certificate, SQL=SELECT 
+                birth_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                birth_certi.created_at, 
+                COALESCE(birth_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, birth_certi.amount, 0) as amount,
+                CONCAT(birth_certi.child_firstname, ' ', birth_certi.child_lastname) as full_name,
+                birth_certi.*
+            FROM birth_certi 
+            LEFT JOIN users ON birth_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = birth_certi.id AND d.certif_type = 'Birth Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=birth_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, docType=Death Certificate, SQL=SELECT 
+                death_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                death_certi.created_at, 
+                COALESCE(death_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, death_certi.amount, 0) as amount,
+                CONCAT(death_certi.dead_firstname, ' ', death_certi.dead_lastname) as full_name,
+                death_certi.*
+            FROM death_certi 
+            LEFT JOIN users ON death_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = death_certi.id AND d.certif_type = 'Death Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=death_certi, returned 5 rows. First row: Array
+(
+    [id] => 41
+    [username] => carl456
+    [type] => death
+    [date] => 2025-06-26 08:28:26
+    [created_at] => 2025-06-26 08:28:26
+    [status] => APPROVED
+    [reference_number] => REG-00027
+    [transaction_number] => REF202506266984
+    [amount] => 0.00
+    [type_label] => Death Certificate
+    [full_name] => Juan Dela Cruz
+    [data] => Array
+        (
+            [id] => 41
+            [username] => carl456
+            [created_at] => 2025-06-26 08:28:26
+            [status] => APPROVED
+            [reference_number] => REG-00027
+            [transaction_number] => REF202506266984
+            [amount] => 0.00
+            [full_name] => Juan Dela Cruz
+            [user_id] => 32
+            [dead_firstname] => Juan
+            [dead_middlename] => Miguel
+            [dead_lastname] => Dela Cruz
+            [dead_suffix] => N/A
+            [date_birth] => 2025-06-12
+            [date_death] => 2025-06-24
+            [sexual_orientation] => Male
+            [nationality] => 
+            [place_death] => 
+            [address] => 1234 PUP
+            [address_option] => Pickup
+            [purpose_certi] => legal_and_administrative_purposes
+            [number_copies] => 1
+            [updated_at] => 2025-06-27 00:50:19
+            [updated_by] => 0
+        )
+
+)
+
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, docType=Marriage Certificate, SQL=SELECT 
+                marriage_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                marriage_certi.created_at, 
+                COALESCE(marriage_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, marriage_certi.amount, 0) as amount,
+                CONCAT(marriage_certi.husband_firstname, ' ', marriage_certi.husband_lastname, ' & ', marriage_certi.wife_firstname, ' ', marriage_certi.wife_lastname) as full_name,
+                marriage_certi.*
+            FROM marriage_certi 
+            LEFT JOIN users ON marriage_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = marriage_certi.id AND d.certif_type = 'Marriage Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=marriage_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, docType=CENOMAR Certificate, SQL=SELECT 
+                cenomar_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenomar_certi.created_at, 
+                COALESCE(cenomar_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenomar_certi.amount, 0) as amount,
+                cenomar_certi.child_firstname as full_name,
+                cenomar_certi.*
+            FROM cenomar_certi 
+            LEFT JOIN users ON cenomar_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenomar_certi.id AND d.certif_type = 'CENOMAR Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenomar_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, docType=CENODEATH Certificate, SQL=SELECT 
+                cenodeath_certi.id, 
+                COALESCE(users.username, 'Unknown User') as username, 
+                cenodeath_certi.created_at, 
+                COALESCE(cenodeath_certi.status, 'PENDING') as status,
+                d.reg_id as reference_number,
+                d.transaction_number,
+                COALESCE(d.amount, cenodeath_certi.amount, 0) as amount,
+                CONCAT(cenodeath_certi.deceased_firstname, ' ', cenodeath_certi.deceased_lastname) as full_name,
+                cenodeath_certi.*
+            FROM cenodeath_certi 
+            LEFT JOIN users ON cenodeath_certi.user_id = users.id
+            LEFT JOIN document d ON d.cert_id = cenodeath_certi.id AND d.certif_type = 'CENODEATH Certificate'
+            WHERE 1=1, params=[]
+[27-Jun-2025 13:49:54 Europe/Berlin] [DEBUG] fetchCertificates: table=cenodeath_certi, returned 0 rows. First row: 
+[27-Jun-2025 13:50:24 Europe/Berlin] Processing get_certificates request for role: Releasing Officer
+[27-Jun-2025 13:50:24 Europe/Berlin] Executing SQL for birth_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(child_firstname, ' ', child_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM birth_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'Birth Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates in birth_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates ready for release in birth_certi
+[27-Jun-2025 13:50:24 Europe/Berlin] Executing SQL for death_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(dead_firstname, ' ', dead_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM death_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'Death Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates in death_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates ready for release in death_certi
+[27-Jun-2025 13:50:24 Europe/Berlin] Executing SQL for marriage_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(husband_firstname, ' ', husband_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM marriage_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'Marriage Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates in marriage_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates ready for release in marriage_certi
+[27-Jun-2025 13:50:24 Europe/Berlin] Executing SQL for cenomar_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(child_firstname, ' ', child_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM cenomar_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'CENOMAR Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates in cenomar_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates ready for release in cenomar_certi
+[27-Jun-2025 13:50:24 Europe/Berlin] Executing SQL for cenodeath_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(deceased_firstname, ' ', deceased_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM cenodeath_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'CENODEATH Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates in cenodeath_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 13:50:24 Europe/Berlin] Found 0 certificates ready for release in cenodeath_certi
+[27-Jun-2025 13:50:24 Europe/Berlin] Returning 0 ready for release, 1 recently released
+[27-Jun-2025 14:05:24 Europe/Berlin] Processing get_certificates request for role: Releasing Officer
+[27-Jun-2025 14:05:24 Europe/Berlin] Executing SQL for birth_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(child_firstname, ' ', child_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM birth_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'Birth Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates in birth_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates ready for release in birth_certi
+[27-Jun-2025 14:05:24 Europe/Berlin] Executing SQL for death_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(dead_firstname, ' ', dead_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM death_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'Death Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates in death_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates ready for release in death_certi
+[27-Jun-2025 14:05:24 Europe/Berlin] Executing SQL for marriage_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(husband_firstname, ' ', husband_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM marriage_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'Marriage Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates in marriage_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates ready for release in marriage_certi
+[27-Jun-2025 14:05:24 Europe/Berlin] Executing SQL for cenomar_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(child_firstname, ' ', child_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM cenomar_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'CENOMAR Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates in cenomar_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates ready for release in cenomar_certi
+[27-Jun-2025 14:05:24 Europe/Berlin] Executing SQL for cenodeath_certi: SELECT 
+                    c.id,
+                    d.reg_id as reference_number,
+                    CONCAT(deceased_firstname, ' ', deceased_lastname) as claimant_name,
+                    c.address_option as release_method,
+                    c.status,
+                    'N/A' as released_by,
+                    NULL as date_released,
+                    c.*
+                FROM cenodeath_certi c
+                LEFT JOIN document d ON d.cert_id = c.id AND d.certif_type = 'CENODEATH Certificate'
+                WHERE c.status IN ('SIGNED', 'READY_FOR_RELEASE')
+                ORDER BY c.created_at DESC
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates in cenodeath_certi with status SIGNED or READY_FOR_RELEASE
+[27-Jun-2025 14:05:24 Europe/Berlin] Found 0 certificates ready for release in cenodeath_certi
+[27-Jun-2025 14:05:24 Europe/Berlin] Returning 0 ready for release, 1 recently released
